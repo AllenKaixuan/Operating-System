@@ -48,6 +48,9 @@
 
 /* Gate descriptors for interrupts and traps */
 struct gatedesc {
+    //IDT中的每一个表项均占8个字节；
+    //其中最开始2个字节和最末尾2个字节定义了offset
+    //第16-31位定义了处理代码入口地址的段选择子，使用其在GDT中查找到相应段的base address，加上offset就是中断处理代码的入口；
     unsigned gd_off_15_0 : 16;        // low 16 bits of offset in segment
     unsigned gd_ss : 16;            // segment selector
     unsigned gd_args : 5;            // # args, 0 for interrupt/trap gates

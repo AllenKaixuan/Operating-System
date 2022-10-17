@@ -6,13 +6,15 @@
 #include <kdebug.h>
 
 #define STACKFRAME_DEPTH 20
+// stabs table's begin/end
+extern const struct stab __STAB_BEGIN__[];
+extern const struct stab __STAB_END__[];
+// string table's begin/end
+extern const char __STABSTR_BEGIN__[];
+extern const char __STABSTR_END__[];
 
-extern const struct stab __STAB_BEGIN__[];  // beginning of stabs table
-extern const struct stab __STAB_END__[];    // end of stabs table
-extern const char __STABSTR_BEGIN__[];      // beginning of string table
-extern const char __STABSTR_END__[];        // end of string table
-
-/* debug information about a particular instruction pointer */
+// debug info
+// about a particular instruction pointer
 struct eipdebuginfo {
     const char *eip_file;                   // source code filename for eip
     int eip_line;                           // source code line number for eip
@@ -209,11 +211,14 @@ debuginfo_eip(uintptr_t addr, struct eipdebuginfo *info) {
     return 0;
 }
 
-/* *
- * print_kerninfo - print the information about kernel, including the location
- * of kernel entry, the start addresses of data and text segements, the start
- * address of free memory and how many memory that kernel has used.
- * */
+/* print kern info
+ * including:
+ *  * the location of kernel entry
+ *  * the start address of data segements
+ *  * the start address of text segements
+ *  * the start address of free memory
+ *  * how many memory that kernel has used.
+*/
 void
 print_kerninfo(void) {
     extern char etext[], edata[], end[], kern_init[];
@@ -225,12 +230,15 @@ print_kerninfo(void) {
     cprintf("Kernel executable memory footprint: %dKB\n", (end - kern_init + 1023)/1024);
 }
 
-/* *
- * print_debuginfo - read and print the stat information for the address @eip,
- * and info.eip_fn_addr should be the first address of the related function.
+/* print debug info
+ * read and print the stat info for the address @eip,
+ * 
+ * 'info.eip_fn_addr' should be the first address of the related function.
  * */
 void
 print_debuginfo(uintptr_t eip) {
+    //当前所在函数进一步调用其他函数的语句在源代码文件中的行号
+    //一类数值表示从该函数汇编代码的入口处到进一步调用其他函数的call指令的最后一个字节的偏移量，以字节为单位
     struct eipdebuginfo info;
     if (debuginfo_eip(eip, &info) != 0) {
         cprintf("    <unknow>: -- 0x%08x --\n", eip);
@@ -253,7 +261,7 @@ read_eip(void) {
     asm volatile("movl 4(%%ebp), %0" : "=r" (eip));
     return eip;
 }
-
+/* LAB1 YOUR CODE : STEP 1 */
 /* *
  * print_stackframe - print a list of the saved eip values from the nested 'call'
  * instructions that led to the current point of execution
@@ -290,17 +298,32 @@ read_eip(void) {
  * */
 void
 print_stackframe(void) {
-     /* LAB1 YOUR CODE : STEP 1 */
-     /* (1) call read_ebp() to get the value of ebp. the type is (uint32_t);
-      * (2) call read_eip() to get the value of eip. the type is (uint32_t);
-      * (3) from 0 .. STACKFRAME_DEPTH
-      *    (3.1) printf value of ebp, eip
-      *    (3.2) (uint32_t)calling arguments [0..4] = the contents in address (uint32_t)ebp +2 [0..4]
-      *    (3.3) cprintf("\n");
-      *    (3.4) call print_debuginfo(eip-1) to print the C calling function name and line number, etc.
-      *    (3.5) popup a calling stackframe
-      *           NOTICE: the calling funciton's return addr eip  = ss:[ebp+4]
-      *                   the calling funciton's ebp = ss:[ebp]
-      */
+    //ebp是第一个被调用函数的栈帧的base pointer，
+    //eip是在该栈帧对应函数中调用下一个栈帧对应函数的指令的下一条指令的地址（return address）
+    //args是传递给这第一个被调用的函数的参数
+
+    // get ebp and eip
+    uint32_t ebp = read_ebp(), eip = read_eip();
+    // traverse all
+    for(int i=0,j=0; ebp!=0 && i<STACKFRAME_DEPTH;i++){
+        //print ebp & eip
+        cprintf("ebp:0x%08x eip:0x%08x args:",ebp,eip);
+        //print args
+        // +1 -> 返回地址
+        // +2 -> 参数
+        uint32_t *args =(uint32_t*)ebp+2;
+        for(j=0;j<4;j++){
+            cprintf("0x%08x ",args[j]);
+        }
+        cprintf("\n");
+        // print the C calling function name and line number, etc
+        print_debuginfo(eip - 1);
+        // get next func call
+        // popup a calling stackframe
+        // the calling funciton's return addr eip  = ss:[ebp+4]
+        // the calling funciton's ebp = ss:[ebp]
+        eip = ((uint32_t *)ebp)[1];
+        ebp = ((uint32_t *)ebp)[0];
+    }
 }
 

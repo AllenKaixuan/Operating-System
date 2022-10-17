@@ -4,15 +4,15 @@
 #include <picirq.h>
 
 /* *
- * Support for time-related hardware gadgets - the 8253 timer,
- * which generates interruptes on IRQ-0.
+ * Support for time-related hardware gadgets - 
+ * the 8253 timer, which generates interruptes on IRQ-0.
  * */
 
 #define IO_TIMER1           0x040               // 8253 Timer #1
 
 /* *
- * Frequency of all three count-down timers; (TIMER_FREQ/freq)
- * is the appropriate count to generate a frequency of freq Hz.
+ * Frequency of all three count-down timers; 
+ * (TIMER_FREQ/freq) is the appropriate count to generate a frequency of freq Hz.
  * */
 
 #define TIMER_FREQ      1193182
@@ -25,9 +25,10 @@
 
 volatile size_t ticks;
 
+
 /* *
- * clock_init - initialize 8253 clock to interrupt 100 times per second,
- * and then enable IRQ_TIMER.
+ * clock_init
+ * initialize 8253 clock to interrupt 100 times per second, and then enable IRQ_TIMER.
  * */
 void
 clock_init(void) {

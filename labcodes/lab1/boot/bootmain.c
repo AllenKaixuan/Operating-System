@@ -3,16 +3,12 @@
 #include <elf.h>
 
 /* *********************************************************************
- * This a dirt simple boot loader, whose sole job is to boot
- * an ELF kernel image from the first IDE hard disk.
+ *  a dirt simple boot loader
+ *  boot an ELF kernel image from the 1st IDE hard disk.
  *
- * DISK LAYOUT
- *  * This program(bootasm.S and bootmain.c) is the bootloader.
- *    It should be stored in the first sector of the disk.
- *
- *  * The 2nd sector onward holds the kernel image.
- *
- *  * The kernel image must be in ELF format.
+ *  DISK LAYOUT
+ *  *   the 1st sector: store the bootloader(bootasm.S and bootmain.c)
+ *  *   The 2nd sector: holds the kernel image(ELF format).
  *
  * BOOT UP STEPS
  *  * when the CPU boots it loads the BIOS into memory and executes it
@@ -33,14 +29,20 @@
 #define SECTSIZE        512
 #define ELFHDR          ((struct elfhdr *)0x10000)      // scratch space
 
-/* waitdisk - wait for disk ready */
+/*  waitdisk
+ *  do
+ *      wait for disk ready
+ */
 static void
 waitdisk(void) {
     while ((inb(0x1F7) & 0xC0) != 0x40)
         /* do nothing */;
 }
 
-/* readsect - read a single sector at @secno into @dst */
+/* readsect
+ * do
+ *      read a single sector at @secno into @dst 
+ */
 static void
 readsect(void *dst, uint32_t secno) {
     // wait for disk to be ready
@@ -60,10 +62,10 @@ readsect(void *dst, uint32_t secno) {
     insl(0x1F0, dst, SECTSIZE / 4);
 }
 
-/* *
- * readseg - read @count bytes at @offset from kernel into virtual address @va,
- * might copy more than asked.
- * */
+/*  readseg
+ *  do
+ *      read @count bytes at @offset from kernel into virtual address @va, might copy more than asked.
+ */
 static void
 readseg(uintptr_t va, uint32_t count, uint32_t offset) {
     uintptr_t end_va = va + count;
@@ -82,7 +84,9 @@ readseg(uintptr_t va, uint32_t count, uint32_t offset) {
     }
 }
 
-/* bootmain - the entry of bootloader */
+/*  bootmain
+ *  the entry of bootloader
+ */
 void
 bootmain(void) {
     // read the 1st page off disk
