@@ -4,9 +4,10 @@
 
 /* HIGH level console I/O */
 
-/* *
- * cputch - writes a single character @c to stdout, and it will
- * increace the value of counter pointed by @cnt.
+/*  cputch
+ *  do
+ *      writes a single character @c to stdout
+ *      increaces the value of counter pointed by @cnt.
  * */
 static void
 cputch(int c, int *cnt) {
@@ -14,15 +15,14 @@ cputch(int c, int *cnt) {
     (*cnt) ++;
 }
 
-/* *
- * vcprintf - format a string and writes it to stdout
- *
- * The return value is the number of characters which would be
- * written to stdout.
- *
- * Call this function if you are already dealing with a va_list.
- * Or you probably want cprintf() instead.
- * */
+/*  vcprintf
+ *  do
+ *      format a string and writes it to stdout
+ *  return
+ *      the number of characters which would be written to stdout
+ *  call it when
+ *      you are already dealing with a va_list. Or you probably want cprintf() instead.
+ */
 int
 vcprintf(const char *fmt, va_list ap) {
     int cnt = 0;
@@ -30,12 +30,12 @@ vcprintf(const char *fmt, va_list ap) {
     return cnt;
 }
 
-/* *
- * cprintf - formats a string and writes it to stdout
- *
- * The return value is the number of characters which would be
- * written to stdout.
- * */
+/*  cprintf
+ *  do
+ *      format a string and writes it to stdout
+ *  return
+ *      the number of characters which would be written to stdout
+ */
 int
 cprintf(const char *fmt, ...) {
     va_list ap;
@@ -46,16 +46,21 @@ cprintf(const char *fmt, ...) {
     return cnt;
 }
 
-/* cputchar - writes a single character to stdout */
+/*  cputchar
+ *  do
+ *      writes a single character to stdout
+ */
 void
 cputchar(int c) {
     cons_putc(c);
 }
 
-/* *
- * cputs- writes the string pointed by @str to stdout and
- * appends a newline character.
- * */
+/*  cputs
+ *  do
+ *      writes the string pointed by @str to stdout and appends a newline character.
+ *  return
+ *      the number of characters which would be written to stdout
+ */
 int
 cputs(const char *str) {
     int cnt = 0;
@@ -67,7 +72,12 @@ cputs(const char *str) {
     return cnt;
 }
 
-/* getchar - reads a single non-zero character from stdin */
+/*  getchar
+ *  do
+ *      reads a single non-zero character from stdin 
+ *  return
+ *      this non-zero charater
+ */
 int
 getchar(void) {
     int c;
