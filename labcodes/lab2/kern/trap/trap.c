@@ -46,6 +46,32 @@ idt_init(void) {
       *     You don't know the meaning of this instruction? just google it! and check the libs/x86.h to know more.
       *     Notice: the argument of lidt is idt_pd. try to find it!
       */
+    //由于ISR的入口已经在vectors.S中定义完了，因此只需要在idt中的每一项填入对应中断的ISR入口即可
+    //可以使用宏SETGATE来对idt中的没一项进行填充，其中除了syscall之外，其他门的is trap为均为0，syscall为1
+    //段选择子则填入内核的代码段选择子
+    //DPL除了syscall填入3之外，其余均填入0（之后的拓展实验1部分需要将用于切换到内核态的软终端对应门的DPL也改成3）
+    //然后使用lidt加载IDT即可，指令格式与LGDT类似；至此完成了中断描述符表的初始化过程；
+
+    // entry adders of ISR(Interrupt Service Routine)
+    extern uintptr_t __vectors[];
+    // setup the entries of ISR in IDT(Interrupt Description Table)
+    int n=sizeof(idt)/sizeof(struct gatedesc);
+    for(int i=0;i<n;i++){
+        /* * Set up a normal interrupt/trap gate descriptor
+        trap: 1 for a trap (= exception) gate, 0 for an interrupt gate
+        sel: 段选择器
+        off: 偏移
+        dpl: 特权级
+        * */
+        SETGATE(idt[i],0,GD_KTEXT,__vectors[i],DPL_KERNEL);
+    }
+    //系统调用中断
+    //而ucore的应用程序处于特权级３，需要采用｀int 0x80`指令操作（软中断）来发出系统调用请求，并要能实现从特权级３到特权级０的转换
+    //所以系统调用中断(T_SYSCALL)所对应的中断门描述符中的特权级（DPL）需要设置为３。
+    SETGATE(idt[T_SYSCALL],1,GD_KTEXT,__vectors[T_SYSCALL],DPL_USER);
+    SETGATE(idt[T_SWITCH_TOK],0,GD_KTEXT,__vectors[T_SWITCH_TOK],DPL_USER);
+    // load the IDT
+    lidt(&idt_pd);
 }
 
 static const char *
@@ -147,6 +173,11 @@ trap_dispatch(struct trapframe *tf) {
          * (2) Every TICK_NUM cycle, you can print some info using a funciton, such as print_ticks().
          * (3) Too Simple? Yes, I think so!
          */
+        ticks++;
+        if(ticks%TICK_NUM==0){
+            //print ticks info
+            print_ticks();
+        }
         break;
     case IRQ_OFFSET + IRQ_COM1:
         c = cons_getc();
@@ -158,8 +189,24 @@ trap_dispatch(struct trapframe *tf) {
         break;
     //LAB1 CHALLENGE 1 : YOUR CODE you should modify below codes.
     case T_SWITCH_TOU:
+        if (tf->tf_cs != USER_CS) {
+            //为了使得程序在低CPL的情况下仍然能够使用IO，需要将eflags中对应的IOPL位置成表示用户态的
+            //if CPL > IOPL, then cpu will generate a general protection.
+            tf->tf_eflags |= FL_IOPL_MASK;
+            //iret认定在发生中断的时候是否发生了PL的切换，是取决于CPL和最终跳转回的地址的cs选择子对应的段描述符处的CPL（也就是发生中断前的CPL）是否相等来决定的
+            //因此将保存在trapframe中的原先的cs修改成指向用户态描述子的USER_CS
+            tf->tf_cs = USER_CS;
+            //为了使得中断返回之后能够正常访问数据，将其他的段选择子都修改为USER_DS
+            tf->tf_ds = tf->tf_es = tf->tf_gs = tf->tf_ss = tf->tf_fs = USER_DS;
+        }
+        break;
     case T_SWITCH_TOK:
-        panic("T_SWITCH_** ??\n");
+        if (tf->tf_cs != KERNEL_CS) {
+            tf->tf_eflags &= ~FL_IOPL_MASK;
+            tf->tf_cs = KERNEL_CS;
+            tf->tf_ds = tf->tf_es = tf->tf_gs = tf->tf_ss = tf->tf_fs = KERNEL_DS;
+        }
+        //panic("T_SWITCH_** ??\n");
         break;
     case IRQ_OFFSET + IRQ_IDE1:
     case IRQ_OFFSET + IRQ_IDE2:

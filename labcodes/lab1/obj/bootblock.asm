@@ -5,11 +5,11 @@ obj/bootblock.o：     文件格式 elf32-i386
 Disassembly of section .text:
 
 00007c00 <start>:
-
-# start address should be 0:7c00, in real mode, the beginning address of the running bootloader
 .globl start
 start:
+//
 .code16                                             # Assemble for 16-bit mode
+    # 关闭中断、清除EFLAGS的DF位以及将ax, ds, es, ss寄存器初始化为0；
     cli                                             # Disable interrupts
     7c00:	fa                   	cli    
     cld                                             # String operations increment

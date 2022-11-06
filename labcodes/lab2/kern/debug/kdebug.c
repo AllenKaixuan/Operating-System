@@ -305,5 +305,31 @@ print_stackframe(void) {
       *           NOTICE: the calling funciton's return addr eip  = ss:[ebp+4]
       *                   the calling funciton's ebp = ss:[ebp]
       */
+    // ebp是第一个被调用函数的栈帧的base pointer，
+    // eip是在该栈帧对应函数中调用下一个栈帧对应函数的指令的下一条指令的地址（return address）
+    // args是传递给这第一个被调用的函数的参数
+    // get ebp and eip
+    uint32_t ebp = read_ebp(), eip = read_eip();
+    // traverse all
+    for(int i=0,j=0; ebp!=0 && i<STACKFRAME_DEPTH;i++){
+        //print ebp & eip
+        cprintf("ebp:0x%08x eip:0x%08x args:",ebp,eip);
+        //print args
+        // +1 -> 返回地址
+        // +2 -> 参数
+        uint32_t *args =(uint32_t*)ebp+2;
+        for(j=0;j<4;j++){
+            cprintf("0x%08x ",args[j]);
+        }
+        cprintf("\n");
+        // print the C calling function name and line number, etc
+        print_debuginfo(eip - 1);
+        // get next func call
+        // popup a calling stackframe
+        // the calling funciton's return addr eip  = ss:[ebp+4]
+        // the calling funciton's ebp = ss:[ebp]
+        eip = ((uint32_t *)ebp)[1];
+        ebp = ((uint32_t *)ebp)[0];
+    }
 }
 

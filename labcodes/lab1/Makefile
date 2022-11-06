@@ -113,7 +113,9 @@ INCLUDE	+= libs/
 CFLAGS	+= $(addprefix -I,$(INCLUDE))
 
 LIBDIR	+= libs
-
+# 寻找libs目录下的所有具有.c, .s后缀的文件，并生成相应的.o文件，放置在obj/libs/文件夹下
+# 具体生成的文件是printfmt.o, string.o文件，与此同时，该文件夹下还生成了.d文件，这是Makefile自动生成的依赖文件列表所存放的位置，
+# 比如打开string.d文件可以发现，string.o文件的生成依赖于string.c, string.h, x86.h, defs.h四个文件，这与我们对于代码的观察是一致的；
 $(call add_files_cc,$(call listf_cc,$(LIBDIR)),libs,)
 
 # -------------------------------------------------------------------
@@ -132,16 +134,24 @@ KSRCDIR		+= kern/init \
 			   kern/mm
 
 KCFLAGS		+= $(addprefix -I,$(KINCLUDE))
-
+# 将用于生成kernel的所有子目录下包含的CTYPE文件（.s, .c文件）所对应的.o文件以及.d文件
+# 这段代码与上述生成obj/libs/*.o文件的代码类似，区别仅在于其还新指定了若干gcc编译选项，存放在KCFLAGS变量中，具体为制定了若干存放在KINCLUDE变量下的头文件
+# 具体而言，该命令最终生成的文件为obj/kern下子目录里的以stdio, readline, panic, kdebug, kmonitor, clock, 
+# console, picirq, intr, trap, vector, trapentry, pmm为前缀的.d, .o文件；
 $(call add_files_cc,$(call listf_cc,$(KSRCDIR)),kernel,$(KCFLAGS))
 
 KOBJS	= $(call read_packet,kernel libs)
 
 # create kernel target
 kernel = $(call totarget,kernel)
-
+# /bin/kernel文件依赖于tools/kernel.ld文件，并且没有指定生成规则
+# 也就是说如果没有预先准备好kernel.ld，就会在make的时候产生错误；
 $(kernel): tools/kernel.ld
-
+# kernel文件的生成还依赖于上述生成的obj/libs, obj/kernels下的.o文件，并且生成规则为使用ld链接器将这些.o文件连接成kernel文件
+# 其中ld的-T表示指定使用kernel.ld来替代默认的链接器脚本；
+# 关于LDFLAGS中的选项含义，将在下文中描述LDFLAGS变量定义的时候进行描述；
+# 之后还使用objdump反汇编出kernel的汇编代码，-S表示将源代码与汇编代码混合展示出来，这部分代码最终保存在kernel.asm文件中；
+# -t表示打印出文件的符号表表项，然后通过管道将带有符号表的反汇编结果作为sed命令的标准输入进行处理，最终将符号表信息保存到kernel.sym文件中；
 $(kernel): $(KOBJS)
 	@echo + ld $@
 	$(V)$(LD) $(LDFLAGS) -T tools/kernel.ld -o $@ $(KOBJS)
@@ -154,9 +164,26 @@ $(call create_target,kernel)
 
 # create bootblock
 bootfiles = $(call listf_cc,boot)
+# 表示将boot/文件夹下的bootasm.S, bootmain.c两个文件编译成相应的.o文件，并且生成依赖文件.d；其中涉及到的两个gcc编译选项含义如下所示：
+# -nostdinc: 不搜索默认路径头文件；
+# -0s: 针对生成代码的大小进行优化，这是因为bootloader的总大小被限制为不大于512-2=510字节；
 $(foreach f,$(bootfiles),$(call cc_compile,$(f),$(CC),$(CFLAGS) -Os -nostdinc))
 
 bootblock = $(call totarget,bootblock)
+# bootblock依赖于bootasm.o, bootmain.o文件与sign文件，其中两个.o文件由以下规则生成：
+# $(V)$(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 $^ -o $(call toobj,bootblock): 
+# 	使用ld链接器将依赖的.o文件链接成bootblock.o文件，该文件中除了$(LDFLAGS)之外的其他选项含义如下：
+# 	-N：将代码段和数据段设置为可读可写；
+# 	-e：设置入口；
+# 	-Ttext：设置起始地址为0X7C00；
+# @$(OBJDUMP) -S $(call objfile,bootblock) > $(call asmfile,bootblock): 
+# 	使用objdump将编译结果反汇编出来，保存在bootclock.asm中，-S表示将源代码与汇编代码混合表示；
+# @$(OBJCOPY) -S -O binary $(call objfile,bootblock) $(call outfile,bootblock): 
+#	使用objcopy将bootblock.o二进制拷贝到bootblock.out，其中：
+# 	-S：表示移除符号和重定位信息；
+#	-O：表示指定输出格式；
+# @$(call totarget,sign) $(call outfile,bootblock) $(bootblock): 
+#	使用sign程序, 利用bootblock.out生成bootblock;
 
 $(bootblock): $(call toobj,$(bootfiles)) | $(call totarget,sign)
 	@echo + ld $@
@@ -170,12 +197,21 @@ $(call create_target,bootblock)
 # -------------------------------------------------------------------
 
 # create 'sign' tools
+#	利用tools/sing.c生成sign.o, $(call create_target_host,sign,sign)则利用sign.o生成sign，至此bootblock所依赖的文件均生成完毕；
 $(call add_files_host,tools/sign.c,sign,sign)
 $(call create_target_host,sign,sign)
 
 # -------------------------------------------------------------------
 
 # create ucore.img
+# 利用dd命令使用bootblock, kernel文件来生成ucore.img文件：
+# $(V)dd if=/dev/zero of=$@ count=10000 
+#	从/dev/zero文件中获取10000个block，每一个block为512字节，并且均为空字符，并且输出到目标文件ucore.img中；
+# $(V)dd if=$(bootblock) of=$@ conv=notrunc
+#	从bootblock文件中获取数据，并且输出到目标文件ucore.img中，-notruct选项表示不要对数据进行删减；
+# $(V)dd if=$(kernel) of=$@ seek=1 conv=notrunc
+#	从kernel文件中获取数据，并且输出到目标文件ucore.img中, 并且seek = 1表示跳过第一个block，输出到第二个块；
+
 UCOREIMG	:= $(call totarget,ucore.img)
 
 $(UCOREIMG): $(kernel) $(bootblock)
