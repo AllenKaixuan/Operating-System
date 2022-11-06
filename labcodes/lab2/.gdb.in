@@ -1,0 +1,4 @@
+target remote localhost:1234
+break *0xc0100252
+break *0x00100252
+continue

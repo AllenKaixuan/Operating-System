@@ -47,12 +47,17 @@ static void
 readsect(void *dst, uint32_t secno) {
     // wait for disk to be ready
     waitdisk();
-
+    // 往0X1F2地址中写入要读取的扇区数，由于此处需要读一个扇区，因此参数为1
     outb(0x1F2, 1);                         // count = 1
+    // 输入LBA参数的0...7位；
     outb(0x1F3, secno & 0xFF);
+    // 输入LBA参数的8-15位；
     outb(0x1F4, (secno >> 8) & 0xFF);
+    // 输入LBA参数的16-23位；
     outb(0x1F5, (secno >> 16) & 0xFF);
+    // 输入LBA参数的24-27位（对应到0-3位），第四位为0表示从主盘读取，其余位被强制置为1；
     outb(0x1F6, ((secno >> 24) & 0xF) | 0xE0);
+    // 向磁盘发出读命令0x20
     outb(0x1F7, 0x20);                      // cmd 0x20 - read sectors
 
     // wait for disk to be ready

@@ -59,12 +59,13 @@ ebp:0x00007b00 eip:0x0010046c args:0x00103b0e 0x00000012 0x00103af8 0x00007b2c
 ebp:0x00007b20 eip:0x0010194d args:0x00007b4c 0x0000000c 0x00010094 0x00010094 
     kern/trap/trap.c:0: print_ticks+69
 ebp:0x00007b50 eip:0x00101ea8 args:0x00007b7c 0x0000000c 0x00103807 0x00000000 
-    kern/trap/trap.c:166: trap_dispatch+163
+    kern/trap/trap.c:165: trap_dispatch+163
 ebp:0x00007b70 eip:0x00102037 args:0x00007b7c 0x00000000 0x00010094 0x00007be8 
-    kern/trap/trap.c:224: trap+20
+    kern/trap/trap.c:218: trap+20
 ebp:0x00007be8 eip:0x00102ac2 args:0x00000000 0x00000000 0x00000000 0x00007c4f 
     kern/trap/trapentry.S:24: <unknown>+0
 ebp:0x00007bf8 eip:0x00007d74 args:0xc031fcfa 0xc08ed88e 0x64e4d08e 0xfa7502a8 
     <unknow>: -- 0x00007d73 --
 Welcome to the kernel debug monitor!!
 Type 'help' for a list of commands.
+K> 

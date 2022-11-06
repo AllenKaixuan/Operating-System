@@ -85,11 +85,29 @@ lab1_print_cur_status(void) {
 static void
 lab1_switch_to_user(void) {
     //LAB1 CHALLENGE 1 : TODO
+    //执行“int n”时, CPU从中断向量表中, 找到第n号表项, 修改CS和IP
+    //1. 取中断类型码n ;
+    //2. 标志寄存器入栈(pushf) , IF=0, TF=0(重置中断标志位)  ;
+    //3. CS、IP入栈 ;
+    //4. 查中断向量表,  (IP)=(n*4), (CS)=(n*4+2)。
+    asm volatile (
+	    "sub $0x8, %%esp \n"
+	    "int %0 \n"
+	    "movl %%ebp, %%esp"
+	    : 
+	    : "i"(T_SWITCH_TOU)
+	);
 }
 
 static void
 lab1_switch_to_kernel(void) {
     //LAB1 CHALLENGE 1 :  TODO
+    asm volatile (
+	    "int %0 \n"
+	    "movl %%ebp, %%esp \n"
+	    : 
+	    : "i"(T_SWITCH_TOK)
+	);
 }
 
 static void
