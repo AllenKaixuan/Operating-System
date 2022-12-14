@@ -1,10 +1,10 @@
 #include <defs.h>
-#include <x86.h>
+#include <list.h>
 #include <stdio.h>
 #include <string.h>
 #include <swap.h>
 #include <swap_fifo.h>
-#include <list.h>
+#include <x86.h>
 
 /* [wikipedia]The simplest Page Replacement Algorithm(PRA) is a FIFO algorithm. The first-in, first-out
  * page replacement algorithm is a low-overhead algorithm that requires little book-keeping on
@@ -31,23 +31,21 @@ list_entry_t pra_list_head;
  *              Now, From the memory control struct mm_struct, we can access FIFO PRA
  */
 static int
-_fifo_init_mm(struct mm_struct *mm)
-{     
-     list_init(&pra_list_head);
-     mm->sm_priv = &pra_list_head;
-     //cprintf(" mm->sm_priv %x in fifo_init_mm\n",mm->sm_priv);
-     return 0;
+_fifo_init_mm(struct mm_struct* mm) {
+    list_init(&pra_list_head);
+    mm->sm_priv = &pra_list_head;
+    // cprintf(" mm->sm_priv %x in fifo_init_mm\n",mm->sm_priv);
+    return 0;
 }
 /*
  * (3)_fifo_map_swappable: According FIFO PRA, we should link the most recent arrival page at the back of pra_list_head qeueue
  */
 static int
-_fifo_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int swap_in)
-{
+_fifo_map_swappable(struct mm_struct* mm, uintptr_t addr, struct Page* page, int swap_in) {
     // 找到链表入口
-    list_entry_t *head = (list_entry_t *)mm->sm_priv;
+    list_entry_t* head = (list_entry_t*)mm->sm_priv;
     // 找到当前物理页用于组织成链表的list_entry_t
-    list_entry_t *entry = &(page->pra_page_link);
+    list_entry_t* entry = &(page->pra_page_link);
     // 检查
     assert(entry != NULL && head != NULL);
     // record the page access situlation
@@ -62,10 +60,9 @@ _fifo_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int
  *                            then assign the value of *ptr_page to the addr of this page.
  */
 static int
-_fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick)
-{
+_fifo_swap_out_victim(struct mm_struct* mm, struct Page** ptr_page, int in_tick) {
     // 找到链表的入口
-    list_entry_t *head = (list_entry_t *)mm->sm_priv;
+    list_entry_t* head = (list_entry_t*)mm->sm_priv;
     // 检查
     assert(head != NULL);
     assert(in_tick == 0);
@@ -73,11 +70,11 @@ _fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick
     /* LAB3 EXERCISE 2: YOUR CODE */
     // (1) unlink the earliest arrival page in front of pra_list_head qeueue
     // 取出链表头，即最早进入的物理页面
-    list_entry_t *le = list_next(head);
-    assert(le != head);     // 链表非空
+    list_entry_t* le = list_next(head);
+    assert(le != head);  // 链表非空
     // (2) assign the value of *ptr_page to the addr of this page
     // 找到对应的物理页面的Page结构
-    struct Page *page = le2page(le, pra_page_link); 
+    struct Page* page = le2page(le, pra_page_link);
     // 从链表上删除取出的即将被换出的物理页面
     list_del(le);
     *ptr_page = page;
@@ -87,71 +84,68 @@ _fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick
 static int
 _fifo_check_swap(void) {
     cprintf("write Virt Page c in fifo_check_swap\n");
-    *(unsigned char *)0x3000 = 0x0c;
-    assert(pgfault_num==4);
+    *(unsigned char*)0x3000 = 0x0c;
+    assert(pgfault_num == 4);
     cprintf("write Virt Page a in fifo_check_swap\n");
-    *(unsigned char *)0x1000 = 0x0a;
-    assert(pgfault_num==4);
+    *(unsigned char*)0x1000 = 0x0a;
+    assert(pgfault_num == 4);
     cprintf("write Virt Page d in fifo_check_swap\n");
-    *(unsigned char *)0x4000 = 0x0d;
-    assert(pgfault_num==4);
+    *(unsigned char*)0x4000 = 0x0d;
+    assert(pgfault_num == 4);
     cprintf("write Virt Page b in fifo_check_swap\n");
-    *(unsigned char *)0x2000 = 0x0b;
-    assert(pgfault_num==4);
+    *(unsigned char*)0x2000 = 0x0b;
+    assert(pgfault_num == 4);
     cprintf("write Virt Page e in fifo_check_swap\n");
-    *(unsigned char *)0x5000 = 0x0e;
-    assert(pgfault_num==5);
+    *(unsigned char*)0x5000 = 0x0e;
+    assert(pgfault_num == 5);
     cprintf("write Virt Page b in fifo_check_swap\n");
-    *(unsigned char *)0x2000 = 0x0b;
-    assert(pgfault_num==5);
+    *(unsigned char*)0x2000 = 0x0b;
+    assert(pgfault_num == 5);
     cprintf("write Virt Page a in fifo_check_swap\n");
-    *(unsigned char *)0x1000 = 0x0a;
-    assert(pgfault_num==6);
+    *(unsigned char*)0x1000 = 0x0a;
+    assert(pgfault_num == 6);
     cprintf("write Virt Page b in fifo_check_swap\n");
-    *(unsigned char *)0x2000 = 0x0b;
-    assert(pgfault_num==7);
+    *(unsigned char*)0x2000 = 0x0b;
+    assert(pgfault_num == 7);
     cprintf("write Virt Page c in fifo_check_swap\n");
-    *(unsigned char *)0x3000 = 0x0c;
-    assert(pgfault_num==8);
+    *(unsigned char*)0x3000 = 0x0c;
+    assert(pgfault_num == 8);
     cprintf("write Virt Page d in fifo_check_swap\n");
-    *(unsigned char *)0x4000 = 0x0d;
-    assert(pgfault_num==9);
+    *(unsigned char*)0x4000 = 0x0d;
+    assert(pgfault_num == 9);
     cprintf("write Virt Page e in fifo_check_swap\n");
-    *(unsigned char *)0x5000 = 0x0e;
-    assert(pgfault_num==10);
+    *(unsigned char*)0x5000 = 0x0e;
+    assert(pgfault_num == 10);
     cprintf("write Virt Page a in fifo_check_swap\n");
-    assert(*(unsigned char *)0x1000 == 0x0a);
-    *(unsigned char *)0x1000 = 0x0a;
-    assert(pgfault_num==11);
-    return 0;
-}
-
-
-static int
-_fifo_init(void)
-{
+    assert(*(unsigned char*)0x1000 == 0x0a);
+    *(unsigned char*)0x1000 = 0x0a;
+    assert(pgfault_num == 11);
     return 0;
 }
 
 static int
-_fifo_set_unswappable(struct mm_struct *mm, uintptr_t addr)
-{
+_fifo_init(void) {
     return 0;
 }
 
 static int
-_fifo_tick_event(struct mm_struct *mm)
-{ return 0; }
+_fifo_set_unswappable(struct mm_struct* mm, uintptr_t addr) {
+    return 0;
+}
 
+static int
+_fifo_tick_event(struct mm_struct* mm) {
+    return 0;
+}
 
 struct swap_manager swap_manager_fifo =
-{
-     .name            = "fifo swap manager",
-     .init            = &_fifo_init,
-     .init_mm         = &_fifo_init_mm,
-     .tick_event      = &_fifo_tick_event,
-     .map_swappable   = &_fifo_map_swappable,
-     .set_unswappable = &_fifo_set_unswappable,
-     .swap_out_victim = &_fifo_swap_out_victim,
-     .check_swap      = &_fifo_check_swap,
+    {
+        .name = "fifo swap manager",
+        .init = &_fifo_init,
+        .init_mm = &_fifo_init_mm,
+        .tick_event = &_fifo_tick_event,
+        .map_swappable = &_fifo_map_swappable,
+        .set_unswappable = &_fifo_set_unswappable,
+        .swap_out_victim = &_fifo_swap_out_victim,
+        .check_swap = &_fifo_check_swap,
 };
