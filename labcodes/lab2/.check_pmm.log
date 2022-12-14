@@ -2,15 +2,14 @@
 
 
 iPXE (https://ipxe.org) 00:03.0 CA00 PCI2.10 PnP PMM+07F8B4A0+07ECB4A0 CA00
-Press Ctrl-B to configure iPXE (PCI 00:03.0)...
-                                                                               
+Press Ctrl-B to configure iPXE (PCI 00:03.0)...                                                                               
 
 
 Booting from Hard Disk..(THU.CST) os is loading ...
 
 Special kernel symbols:
   entry  0xc0100036 (phys)
-  etext  0xc0106d31 (phys)
+  etext  0xc0106d79 (phys)
   edata  0xc011e000 (phys)
   end    0xc011ef2c (phys)
 Kernel executable memory footprint: 124KB
@@ -24,11 +23,11 @@ ebp:0xc011af88 eip:0xc01000f2 args:0x00000000 0xffff0000 0xc011afb4 0x0000002a
     kern/init/init.c:54: grade_backtrace1+40
 ebp:0xc011afa8 eip:0xc0100112 args:0x00000000 0xc0100036 0xffff0000 0x0000001d 
     kern/init/init.c:59: grade_backtrace0+23
-ebp:0xc011afc8 eip:0xc010013a args:0xc0106d5c 0xc0106d40 0x00000f2c 0x00000000 
+ebp:0xc011afc8 eip:0xc010013a args:0xc0106d9c 0xc0106d80 0x00000f2c 0x00000000 
     kern/init/init.c:64: grade_backtrace+34
-ebp:0xc011aff8 eip:0xc0100087 args:0xc0106ef0 0xc0106ef8 0xc0100c68 0xc0106f17 
+ebp:0xc011aff8 eip:0xc0100087 args:0xc0106f30 0xc0106f38 0xc0100c68 0xc0106f57 
     kern/init/init.c:29: kern_init+80
-memory management: buddy_pmm_manager
+memory management: default_pmm_manager
 e820map:
   memory: 0009fc00, [00000000, 0009fbff], type = 1.
   memory: 00000400, [0009fc00, 0009ffff], type = 2.
@@ -36,7 +35,6 @@ e820map:
   memory: 07ee0000, [00100000, 07fdffff], type = 1.
   memory: 00020000, [07fe0000, 07ffffff], type = 2.
   memory: 00040000, [fffc0000, ffffffff], type = 2.
-buddy init: Total 32289, Buddy 33, Useable 16384
 check_alloc_page() succeeded!
 check_pgdir() succeeded!
 check_boot_pgdir() succeeded!
@@ -53,17 +51,17 @@ End of Test.
 kernel panic at kern/trap/trap.c:18:
     EOT: kernel seems ok.
 stack trackback:
-ebp:0xc011aee0 eip:0xc01009e6 args:0xc0107024 0xc011af24 0x00000012 0xc011af5c 
+ebp:0xc011aee0 eip:0xc01009e6 args:0xc0107064 0xc011af24 0x00000012 0xc011af5c 
     kern/debug/kdebug.c:312: print_stackframe+21
-ebp:0xc011af10 eip:0xc0100d55 args:0xc01070ce 0x00000012 0xc01070b8 0x00000003 
+ebp:0xc011af10 eip:0xc0100d55 args:0xc010710e 0x00000012 0xc01070f8 0x00000003 
     kern/debug/panic.c:27: __panic+103
 ebp:0xc011af30 eip:0xc010196c args:0xc011af68 0xc010035a 0xc0100309 0xc011af5c 
     kern/trap/trap.c:0: print_ticks+65
-ebp:0xc011af60 eip:0xc0101eb5 args:0xc011af8c 0xc010037f 0xc0107054 0xc011afa4 
+ebp:0xc011af60 eip:0xc0101eb5 args:0xc011af8c 0xc010037f 0xc0107094 0xc011afa4 
     kern/trap/trap.c:179: trap_dispatch+159
 ebp:0xc011af80 eip:0xc0102042 args:0xc011af8c 0x0000807c 0x00010094 0xc011aff8 
     kern/trap/trap.c:232: trap+16
-ebp:0xc011aff8 eip:0xc010205d args:0xc0106ef0 0xc0106ef8 0xc0100c68 0xc0106f17 
+ebp:0xc011aff8 eip:0xc010205d args:0xc0106f30 0xc0106f38 0xc0100c68 0xc0106f57 
     kern/trap/trapentry.S:24: <unknown>+0
 Welcome to the kernel debug monitor!!
 Type 'help' for a list of commands.

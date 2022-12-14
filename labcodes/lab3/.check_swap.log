@@ -108,9 +108,9 @@ ebp:0xc0122f10 eip:0xc0100d59 args:0xc010932e 0x00000014 0xc0109318 0x00000000
 ebp:0xc0122f30 eip:0xc01021cd args:0xc0122f68 0xc010035e 0xc010030d 0xc0122f5c 
     kern/trap/trap.c:0: print_ticks+65
 ebp:0xc0122f60 eip:0xc010281e args:0xc0122f8c 0xc0100383 0xc01091b4 0xc0122fa4 
-    kern/trap/trap.c:218: trap_dispatch+198
+    kern/trap/trap.c:233: trap_dispatch+198
 ebp:0xc0122f80 eip:0xc01028dd args:0xc0122f8c 0x0000807c 0x00010094 0xc0122ff8 
-    kern/trap/trap.c:255: trap+16
+    kern/trap/trap.c:269: trap+16
 ebp:0xc0122ff8 eip:0xc01028f8 args:0xc0109050 0xc0109058 0xc0100c6c 0xc0109077 
     kern/trap/trapentry.S:24: <unknown>+0
 Welcome to the kernel debug monitor!!
