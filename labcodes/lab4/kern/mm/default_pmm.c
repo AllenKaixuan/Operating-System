@@ -98,84 +98,147 @@ free_area_t free_area;
 #define free_list (free_area.free_list)
 #define nr_free (free_area.nr_free)
 
+// 初始化空闲内存*块*链表
 static void
 default_init(void) {
+    // 对空闲内存块链表初始化
     list_init(&free_list);
+    // 将总空闲数目置零
     nr_free = 0;
 }
 
+// 初始化*块*, 对其每一*页*进行初始化
 static void
 default_init_memmap(struct Page *base, size_t n) {
+    // 检查: 参数合法性
     assert(n > 0);
+    // 初始化: 所有*页*
+    // 遍历所有*页*
     struct Page *p = base;
     for (; p != base + n; p ++) {
+        // 检查当前页是否是保留的
         assert(PageReserved(p));
-        p->flags = p->property = 0;
+        // 标记位清空
+        p->flags = 0;
+        // 空闲块数置零(即无效)
+        p->property = 0;
+        // 清空引用计数
         set_page_ref(p, 0);
+        // 启用property属性(即, 将页设为空闲)
+        SetPageProperty(p);
     }
+    // 初始化: 第一*页*
+    // 当前块的空闲页数置为n(即, 设置当前块的大小为n, 单位为页)
     base->property = n;
-    SetPageProperty(base);
+    // 更新总空页数
     nr_free += n;
-    list_add(&free_list, &(base->page_link));
+    // 将这个空闲*块*插入到空闲内存*块*链表的最后
+    list_add_before(&free_list, &(base->page_link));
 }
 
+// 分配指定页数的连续空闲物理空间, 并且返回分配到的首页指针
 static struct Page *
 default_alloc_pages(size_t n) {
+    // 检查: 参数合法性
     assert(n > 0);
+    // 检查: 总的空闲物理页数目是否足够, 不够则返回NULL(分配失败)
     if (n > nr_free) {
         return NULL;
     }
+    // 查找: 符合的块
     struct Page *page = NULL;
-    list_entry_t *le = &free_list;
-    while ((le = list_next(le)) != &free_list) {
+    list_entry_t *le = list_next(&free_list);
+    // 按照物理地址的从小到大顺序遍历空闲内存*块*链表
+    while (le != &free_list) {
         struct Page *p = le2page(le, page_link);
+        // 如果找到第一个不小于需要的大小连续内存块, 则成功分配
         if (p->property >= n) {
             page = p;
             break;
         }
+        le = list_next(le);
     }
+    // 处理:
     if (page != NULL) {
-        list_del(&(page->page_link));
+        // 该内存块的大小大于需要的内存大小, 将空闲内存块分裂成两块
         if (page->property > n) {
+            // 放回 物理地址较大的块
             struct Page *p = page + n;
+            // 重新进行初始化
             p->property = page->property - n;
-            list_add(&free_list, &(p->page_link));
-    }
+            // 插入到原块之后
+            list_add_after(&(page->page_link), &(p->page_link));
+        }
+        // 取用 取到的块 或 分裂出来物理地址较小的块
+        // 设为非空闲
+        for (struct Page *p = page; p != page + n; p++) {
+            ClearPageProperty(p);
+        }
+        // 从链表中取出
+        list_del(&(page->page_link));
+        page->property = 0;
+        // 更新总空页数
         nr_free -= n;
-        ClearPageProperty(page);
     }
+    //返回: 分配到的页指针
     return page;
 }
 
+// 释放指定的某一物理页开始的若干个连续物理页，并完成first-fit算法中需要信息的维护
 static void
 default_free_pages(struct Page *base, size_t n) {
+    // 检查: 参数合法性
     assert(n > 0);
-    struct Page *p = base;
-    for (; p != base + n; p ++) {
+    // 检查: 所有页 是否是保留的 或 原本就是空闲的
+    struct Page *p = base, *p_next = NULL;
+    for (; p != base + n; p++) {
         assert(!PageReserved(p) && !PageProperty(p));
+        // 清空标志位
         p->flags = 0;
+        // 恢复为空闲状态
+        SetPageProperty(p);
+        // 清空引用计数
         set_page_ref(p, 0);
+        p->property = 0;
     }
+    // 恢复:
+    // 标记该空闲块大小
     base->property = n;
-    SetPageProperty(base);
+    // 顺序遍历. 找到恰好大于该块位置的空块
     list_entry_t *le = list_next(&free_list);
-    while (le != &free_list) {
-        p = le2page(le, page_link);
+    while(le != &free_list && le < &(base->page_link)){
         le = list_next(le);
-        if (base + base->property == p) {
-            base->property += p->property;
-            ClearPageProperty(p);
-            list_del(&(p->page_link));
-        }
-        else if (p + p->property == base) {
-            p->property += base->property;
-            ClearPageProperty(base);
-            base = p;
-            list_del(&(p->page_link));
-        }
     }
+    // 插入到块链表中
+    list_add_before(le,&(base->page_link));
+    // 更新总空页数
     nr_free += n;
-    list_add(&free_list, &(base->page_link));
+    // 合并:
+    // 不是最后一个块, 向后合并
+    for(le = list_next(&(base->page_link));
+        le != &free_list;
+        le = list_next(&(base->page_link))){
+        p = le2page(le, page_link);
+        // 后一个空闲块 不相邻就退出, 相邻就继续合并
+        if(base + base->property != p)
+            break;
+        base->property += p->property;
+        p->property = 0;
+        list_del(le);
+    }
+    // 不是第一个块, 向前合并
+    for(le = list_prev(&(base->page_link));
+        le != &free_list;
+        le = list_prev(le)){
+        p = le2page(le, page_link);
+        p_next = le2page(list_next(le), page_link);
+        // 前一个空闲块 不相邻就退出, 相邻就继续合并
+        if(p + p->property != p_next)
+            break;
+        p->property += p_next->property;
+        p_next->property = 0;
+        list_del(&(p_next->page_link));
+    }
 }
 
 static size_t

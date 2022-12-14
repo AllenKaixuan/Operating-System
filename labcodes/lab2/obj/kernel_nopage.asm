@@ -9770,6 +9770,7 @@ init_pmm_manager(void) {
   104b3d:	55                   	push   %ebp
   104b3e:	89 e5                	mov    %esp,%ebp
   104b40:	83 ec 18             	sub    $0x18,%esp
+    //pmm_manager = &default_pmm_manager;
     pmm_manager = &buddy_pmm_manager;
   104b43:	c7 05 ac ee 11 00 e8 	movl   $0x1076e8,0x11eeac
   104b4a:	76 10 00 
@@ -10114,7 +10115,7 @@ page_init(void) {
   104e4e:	89 44 24 0c          	mov    %eax,0xc(%esp)
   104e52:	c7 44 24 08 9c 7b 10 	movl   $0x107b9c,0x8(%esp)
   104e59:	00 
-  104e5a:	c7 44 24 04 dd 00 00 	movl   $0xdd,0x4(%esp)
+  104e5a:	c7 44 24 04 de 00 00 	movl   $0xde,0x4(%esp)
   104e61:	00 
   104e62:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   104e69:	e8 7f be ff ff       	call   100ced <__panic>
@@ -10284,7 +10285,7 @@ boot_map_segment(pde_t *pgdir, uintptr_t la, size_t size, uintptr_t pa, uint32_t
   10500f:	00 
   105010:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105017:	00 
-  105018:	c7 44 24 04 fb 00 00 	movl   $0xfb,0x4(%esp)
+  105018:	c7 44 24 04 fc 00 00 	movl   $0xfc,0x4(%esp)
   10501f:	00 
   105020:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105027:	e8 c1 bc ff ff       	call   100ced <__panic>
@@ -10336,7 +10337,7 @@ boot_map_segment(pde_t *pgdir, uintptr_t la, size_t size, uintptr_t pa, uint32_t
   1050af:	00 
   1050b0:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   1050b7:	00 
-  1050b8:	c7 44 24 04 01 01 00 	movl   $0x101,0x4(%esp)
+  1050b8:	c7 44 24 04 02 01 00 	movl   $0x102,0x4(%esp)
   1050bf:	00 
   1050c0:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1050c7:	e8 21 bc ff ff       	call   100ced <__panic>
@@ -10381,7 +10382,7 @@ boot_alloc_page(void) {
         panic("boot_alloc_page failed.\n");
   105114:	c7 44 24 08 07 7c 10 	movl   $0x107c07,0x8(%esp)
   10511b:	00 
-  10511c:	c7 44 24 04 0d 01 00 	movl   $0x10d,0x4(%esp)
+  10511c:	c7 44 24 04 0e 01 00 	movl   $0x10e,0x4(%esp)
   105123:	00 
   105124:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   10512b:	e8 bd bb ff ff       	call   100ced <__panic>
@@ -10414,7 +10415,7 @@ pmm_init(void) {
   105159:	89 44 24 0c          	mov    %eax,0xc(%esp)
   10515d:	c7 44 24 08 9c 7b 10 	movl   $0x107b9c,0x8(%esp)
   105164:	00 
-  105165:	c7 44 24 04 17 01 00 	movl   $0x117,0x4(%esp)
+  105165:	c7 44 24 04 18 01 00 	movl   $0x118,0x4(%esp)
   10516c:	00 
   10516d:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105174:	e8 74 bb ff ff       	call   100ced <__panic>
@@ -10454,7 +10455,7 @@ pmm_init(void) {
   1051ae:	89 44 24 0c          	mov    %eax,0xc(%esp)
   1051b2:	c7 44 24 08 9c 7b 10 	movl   $0x107b9c,0x8(%esp)
   1051b9:	00 
-  1051ba:	c7 44 24 04 2d 01 00 	movl   $0x12d,0x4(%esp)
+  1051ba:	c7 44 24 04 2e 01 00 	movl   $0x12e,0x4(%esp)
   1051c1:	00 
   1051c2:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1051c9:	e8 1f bb ff ff       	call   100ced <__panic>
@@ -10539,7 +10540,7 @@ get_pte(pde_t *pgdir, uintptr_t la, bool create) {
   105265:	89 44 24 0c          	mov    %eax,0xc(%esp)
   105269:	c7 44 24 08 f8 7a 10 	movl   $0x107af8,0x8(%esp)
   105270:	00 
-  105271:	c7 44 24 04 64 01 00 	movl   $0x164,0x4(%esp)
+  105271:	c7 44 24 04 65 01 00 	movl   $0x165,0x4(%esp)
   105278:	00 
   105279:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105280:	e8 68 ba ff ff       	call   100ced <__panic>
@@ -10601,7 +10602,7 @@ get_pte(pde_t *pgdir, uintptr_t la, bool create) {
   105306:	89 44 24 0c          	mov    %eax,0xc(%esp)
   10530a:	c7 44 24 08 f8 7a 10 	movl   $0x107af8,0x8(%esp)
   105311:	00 
-  105312:	c7 44 24 04 78 01 00 	movl   $0x178,0x4(%esp)
+  105312:	c7 44 24 04 79 01 00 	movl   $0x179,0x4(%esp)
   105319:	00 
   10531a:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105321:	e8 c7 b9 ff ff       	call   100ced <__panic>
@@ -10910,7 +10911,7 @@ rcr3(void) {
   105569:	89 44 24 0c          	mov    %eax,0xc(%esp)
   10556d:	c7 44 24 08 9c 7b 10 	movl   $0x107b9c,0x8(%esp)
   105574:	00 
-  105575:	c7 44 24 04 e9 01 00 	movl   $0x1e9,0x4(%esp)
+  105575:	c7 44 24 04 ea 01 00 	movl   $0x1ea,0x4(%esp)
   10557c:	00 
   10557d:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105584:	e8 64 b7 ff ff       	call   100ced <__panic>
@@ -10972,7 +10973,7 @@ check_pgdir(void) {
   1055e1:	00 
   1055e2:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   1055e9:	00 
-  1055ea:	c7 44 24 04 f6 01 00 	movl   $0x1f6,0x4(%esp)
+  1055ea:	c7 44 24 04 f7 01 00 	movl   $0x1f7,0x4(%esp)
   1055f1:	00 
   1055f2:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1055f9:	e8 ef b6 ff ff       	call   100ced <__panic>
@@ -10988,7 +10989,7 @@ check_pgdir(void) {
   10561c:	00 
   10561d:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105624:	00 
-  105625:	c7 44 24 04 f7 01 00 	movl   $0x1f7,0x4(%esp)
+  105625:	c7 44 24 04 f8 01 00 	movl   $0x1f8,0x4(%esp)
   10562c:	00 
   10562d:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105634:	e8 b4 b6 ff ff       	call   100ced <__panic>
@@ -11006,7 +11007,7 @@ check_pgdir(void) {
   105661:	00 
   105662:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105669:	00 
-  10566a:	c7 44 24 04 f8 01 00 	movl   $0x1f8,0x4(%esp)
+  10566a:	c7 44 24 04 f9 01 00 	movl   $0x1f9,0x4(%esp)
   105671:	00 
   105672:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105679:	e8 6f b6 ff ff       	call   100ced <__panic>
@@ -11032,7 +11033,7 @@ check_pgdir(void) {
   1056bc:	00 
   1056bd:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   1056c4:	00 
-  1056c5:	c7 44 24 04 fc 01 00 	movl   $0x1fc,0x4(%esp)
+  1056c5:	c7 44 24 04 fd 01 00 	movl   $0x1fd,0x4(%esp)
   1056cc:	00 
   1056cd:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1056d4:	e8 14 b6 ff ff       	call   100ced <__panic>
@@ -11053,7 +11054,7 @@ check_pgdir(void) {
   105706:	00 
   105707:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   10570e:	00 
-  10570f:	c7 44 24 04 ff 01 00 	movl   $0x1ff,0x4(%esp)
+  10570f:	c7 44 24 04 00 02 00 	movl   $0x200,0x4(%esp)
   105716:	00 
   105717:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   10571e:	e8 ca b5 ff ff       	call   100ced <__panic>
@@ -11068,7 +11069,7 @@ check_pgdir(void) {
   10573c:	00 
   10573d:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105744:	00 
-  105745:	c7 44 24 04 00 02 00 	movl   $0x200,0x4(%esp)
+  105745:	c7 44 24 04 01 02 00 	movl   $0x201,0x4(%esp)
   10574c:	00 
   10574d:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105754:	e8 94 b5 ff ff       	call   100ced <__panic>
@@ -11082,7 +11083,7 @@ check_pgdir(void) {
   105770:	00 
   105771:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105778:	00 
-  105779:	c7 44 24 04 01 02 00 	movl   $0x201,0x4(%esp)
+  105779:	c7 44 24 04 02 02 00 	movl   $0x202,0x4(%esp)
   105780:	00 
   105781:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105788:	e8 60 b5 ff ff       	call   100ced <__panic>
@@ -11102,7 +11103,7 @@ check_pgdir(void) {
   1057b2:	89 44 24 0c          	mov    %eax,0xc(%esp)
   1057b6:	c7 44 24 08 f8 7a 10 	movl   $0x107af8,0x8(%esp)
   1057bd:	00 
-  1057be:	c7 44 24 04 03 02 00 	movl   $0x203,0x4(%esp)
+  1057be:	c7 44 24 04 04 02 00 	movl   $0x204,0x4(%esp)
   1057c5:	00 
   1057c6:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1057cd:	e8 1b b5 ff ff       	call   100ced <__panic>
@@ -11124,7 +11125,7 @@ check_pgdir(void) {
   105809:	00 
   10580a:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105811:	00 
-  105812:	c7 44 24 04 04 02 00 	movl   $0x204,0x4(%esp)
+  105812:	c7 44 24 04 05 02 00 	movl   $0x205,0x4(%esp)
   105819:	00 
   10581a:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105821:	e8 c7 b4 ff ff       	call   100ced <__panic>
@@ -11149,7 +11150,7 @@ check_pgdir(void) {
   105864:	00 
   105865:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   10586c:	00 
-  10586d:	c7 44 24 04 07 02 00 	movl   $0x207,0x4(%esp)
+  10586d:	c7 44 24 04 08 02 00 	movl   $0x208,0x4(%esp)
   105874:	00 
   105875:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   10587c:	e8 6c b4 ff ff       	call   100ced <__panic>
@@ -11168,7 +11169,7 @@ check_pgdir(void) {
   1058ae:	00 
   1058af:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   1058b6:	00 
-  1058b7:	c7 44 24 04 08 02 00 	movl   $0x208,0x4(%esp)
+  1058b7:	c7 44 24 04 09 02 00 	movl   $0x209,0x4(%esp)
   1058be:	00 
   1058bf:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1058c6:	e8 22 b4 ff ff       	call   100ced <__panic>
@@ -11182,7 +11183,7 @@ check_pgdir(void) {
   1058de:	00 
   1058df:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   1058e6:	00 
-  1058e7:	c7 44 24 04 09 02 00 	movl   $0x209,0x4(%esp)
+  1058e7:	c7 44 24 04 0a 02 00 	movl   $0x20a,0x4(%esp)
   1058ee:	00 
   1058ef:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1058f6:	e8 f2 b3 ff ff       	call   100ced <__panic>
@@ -11196,7 +11197,7 @@ check_pgdir(void) {
   10590e:	00 
   10590f:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105916:	00 
-  105917:	c7 44 24 04 0a 02 00 	movl   $0x20a,0x4(%esp)
+  105917:	c7 44 24 04 0b 02 00 	movl   $0x20b,0x4(%esp)
   10591e:	00 
   10591f:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105926:	e8 c2 b3 ff ff       	call   100ced <__panic>
@@ -11210,7 +11211,7 @@ check_pgdir(void) {
   105940:	00 
   105941:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105948:	00 
-  105949:	c7 44 24 04 0b 02 00 	movl   $0x20b,0x4(%esp)
+  105949:	c7 44 24 04 0c 02 00 	movl   $0x20c,0x4(%esp)
   105950:	00 
   105951:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105958:	e8 90 b3 ff ff       	call   100ced <__panic>
@@ -11224,7 +11225,7 @@ check_pgdir(void) {
   105974:	00 
   105975:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   10597c:	00 
-  10597d:	c7 44 24 04 0c 02 00 	movl   $0x20c,0x4(%esp)
+  10597d:	c7 44 24 04 0d 02 00 	movl   $0x20d,0x4(%esp)
   105984:	00 
   105985:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   10598c:	e8 5c b3 ff ff       	call   100ced <__panic>
@@ -11245,7 +11246,7 @@ check_pgdir(void) {
   1059c0:	00 
   1059c1:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   1059c8:	00 
-  1059c9:	c7 44 24 04 0e 02 00 	movl   $0x20e,0x4(%esp)
+  1059c9:	c7 44 24 04 0f 02 00 	movl   $0x20f,0x4(%esp)
   1059d0:	00 
   1059d1:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   1059d8:	e8 10 b3 ff ff       	call   100ced <__panic>
@@ -11259,7 +11260,7 @@ check_pgdir(void) {
   1059f4:	00 
   1059f5:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   1059fc:	00 
-  1059fd:	c7 44 24 04 0f 02 00 	movl   $0x20f,0x4(%esp)
+  1059fd:	c7 44 24 04 10 02 00 	movl   $0x210,0x4(%esp)
   105a04:	00 
   105a05:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105a0c:	e8 dc b2 ff ff       	call   100ced <__panic>
@@ -11273,7 +11274,7 @@ check_pgdir(void) {
   105a27:	00 
   105a28:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105a2f:	00 
-  105a30:	c7 44 24 04 10 02 00 	movl   $0x210,0x4(%esp)
+  105a30:	c7 44 24 04 11 02 00 	movl   $0x211,0x4(%esp)
   105a37:	00 
   105a38:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105a3f:	e8 a9 b2 ff ff       	call   100ced <__panic>
@@ -11292,7 +11293,7 @@ check_pgdir(void) {
   105a71:	00 
   105a72:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105a79:	00 
-  105a7a:	c7 44 24 04 11 02 00 	movl   $0x211,0x4(%esp)
+  105a7a:	c7 44 24 04 12 02 00 	movl   $0x212,0x4(%esp)
   105a81:	00 
   105a82:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105a89:	e8 5f b2 ff ff       	call   100ced <__panic>
@@ -11307,7 +11308,7 @@ check_pgdir(void) {
   105aa7:	00 
   105aa8:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105aaf:	00 
-  105ab0:	c7 44 24 04 12 02 00 	movl   $0x212,0x4(%esp)
+  105ab0:	c7 44 24 04 13 02 00 	movl   $0x213,0x4(%esp)
   105ab7:	00 
   105ab8:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105abf:	e8 29 b2 ff ff       	call   100ced <__panic>
@@ -11321,7 +11322,7 @@ check_pgdir(void) {
   105ad7:	00 
   105ad8:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105adf:	00 
-  105ae0:	c7 44 24 04 13 02 00 	movl   $0x213,0x4(%esp)
+  105ae0:	c7 44 24 04 14 02 00 	movl   $0x214,0x4(%esp)
   105ae7:	00 
   105ae8:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105aef:	e8 f9 b1 ff ff       	call   100ced <__panic>
@@ -11342,7 +11343,7 @@ check_pgdir(void) {
   105b20:	00 
   105b21:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105b28:	00 
-  105b29:	c7 44 24 04 16 02 00 	movl   $0x216,0x4(%esp)
+  105b29:	c7 44 24 04 17 02 00 	movl   $0x217,0x4(%esp)
   105b30:	00 
   105b31:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105b38:	e8 b0 b1 ff ff       	call   100ced <__panic>
@@ -11356,7 +11357,7 @@ check_pgdir(void) {
   105b53:	00 
   105b54:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105b5b:	00 
-  105b5c:	c7 44 24 04 17 02 00 	movl   $0x217,0x4(%esp)
+  105b5c:	c7 44 24 04 18 02 00 	movl   $0x218,0x4(%esp)
   105b63:	00 
   105b64:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105b6b:	e8 7d b1 ff ff       	call   100ced <__panic>
@@ -11377,7 +11378,7 @@ check_pgdir(void) {
   105b9b:	00 
   105b9c:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105ba3:	00 
-  105ba4:	c7 44 24 04 1a 02 00 	movl   $0x21a,0x4(%esp)
+  105ba4:	c7 44 24 04 1b 02 00 	movl   $0x21b,0x4(%esp)
   105bab:	00 
   105bac:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105bb3:	e8 35 b1 ff ff       	call   100ced <__panic>
@@ -11391,7 +11392,7 @@ check_pgdir(void) {
   105bce:	00 
   105bcf:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105bd6:	00 
-  105bd7:	c7 44 24 04 1b 02 00 	movl   $0x21b,0x4(%esp)
+  105bd7:	c7 44 24 04 1c 02 00 	movl   $0x21c,0x4(%esp)
   105bde:	00 
   105bdf:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105be6:	e8 02 b1 ff ff       	call   100ced <__panic>
@@ -11409,7 +11410,7 @@ check_pgdir(void) {
   105c0e:	00 
   105c0f:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105c16:	00 
-  105c17:	c7 44 24 04 1d 02 00 	movl   $0x21d,0x4(%esp)
+  105c17:	c7 44 24 04 1e 02 00 	movl   $0x21e,0x4(%esp)
   105c1e:	00 
   105c1f:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105c26:	e8 c2 b0 ff ff       	call   100ced <__panic>
@@ -11460,7 +11461,7 @@ check_boot_pgdir(void) {
   105c94:	89 44 24 0c          	mov    %eax,0xc(%esp)
   105c98:	c7 44 24 08 f8 7a 10 	movl   $0x107af8,0x8(%esp)
   105c9f:	00 
-  105ca0:	c7 44 24 04 29 02 00 	movl   $0x229,0x4(%esp)
+  105ca0:	c7 44 24 04 2a 02 00 	movl   $0x22a,0x4(%esp)
   105ca7:	00 
   105ca8:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105caf:	e8 39 b0 ff ff       	call   100ced <__panic>
@@ -11480,7 +11481,7 @@ check_boot_pgdir(void) {
   105ce7:	00 
   105ce8:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105cef:	00 
-  105cf0:	c7 44 24 04 29 02 00 	movl   $0x229,0x4(%esp)
+  105cf0:	c7 44 24 04 2a 02 00 	movl   $0x22a,0x4(%esp)
   105cf7:	00 
   105cf8:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105cff:	e8 e9 af ff ff       	call   100ced <__panic>
@@ -11496,7 +11497,7 @@ check_boot_pgdir(void) {
   105d1e:	00 
   105d1f:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105d26:	00 
-  105d27:	c7 44 24 04 2a 02 00 	movl   $0x22a,0x4(%esp)
+  105d27:	c7 44 24 04 2b 02 00 	movl   $0x22b,0x4(%esp)
   105d2e:	00 
   105d2f:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105d36:	e8 b2 af ff ff       	call   100ced <__panic>
@@ -11522,7 +11523,7 @@ check_boot_pgdir(void) {
   105d79:	89 44 24 0c          	mov    %eax,0xc(%esp)
   105d7d:	c7 44 24 08 9c 7b 10 	movl   $0x107b9c,0x8(%esp)
   105d84:	00 
-  105d85:	c7 44 24 04 2d 02 00 	movl   $0x22d,0x4(%esp)
+  105d85:	c7 44 24 04 2e 02 00 	movl   $0x22e,0x4(%esp)
   105d8c:	00 
   105d8d:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105d94:	e8 54 af ff ff       	call   100ced <__panic>
@@ -11534,7 +11535,7 @@ check_boot_pgdir(void) {
   105dac:	00 
   105dad:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105db4:	00 
-  105db5:	c7 44 24 04 2d 02 00 	movl   $0x22d,0x4(%esp)
+  105db5:	c7 44 24 04 2e 02 00 	movl   $0x22e,0x4(%esp)
   105dbc:	00 
   105dbd:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105dc4:	e8 24 af ff ff       	call   100ced <__panic>
@@ -11548,7 +11549,7 @@ check_boot_pgdir(void) {
   105ddb:	00 
   105ddc:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105de3:	00 
-  105de4:	c7 44 24 04 2f 02 00 	movl   $0x22f,0x4(%esp)
+  105de4:	c7 44 24 04 30 02 00 	movl   $0x230,0x4(%esp)
   105deb:	00 
   105dec:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105df3:	e8 f5 ae ff ff       	call   100ced <__panic>
@@ -11574,7 +11575,7 @@ check_boot_pgdir(void) {
   105e36:	00 
   105e37:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105e3e:	00 
-  105e3f:	c7 44 24 04 33 02 00 	movl   $0x233,0x4(%esp)
+  105e3f:	c7 44 24 04 34 02 00 	movl   $0x234,0x4(%esp)
   105e46:	00 
   105e47:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105e4e:	e8 9a ae ff ff       	call   100ced <__panic>
@@ -11588,7 +11589,7 @@ check_boot_pgdir(void) {
   105e6a:	00 
   105e6b:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105e72:	00 
-  105e73:	c7 44 24 04 34 02 00 	movl   $0x234,0x4(%esp)
+  105e73:	c7 44 24 04 35 02 00 	movl   $0x235,0x4(%esp)
   105e7a:	00 
   105e7b:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105e82:	e8 66 ae ff ff       	call   100ced <__panic>
@@ -11608,7 +11609,7 @@ check_boot_pgdir(void) {
   105eb6:	00 
   105eb7:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105ebe:	00 
-  105ebf:	c7 44 24 04 35 02 00 	movl   $0x235,0x4(%esp)
+  105ebf:	c7 44 24 04 36 02 00 	movl   $0x236,0x4(%esp)
   105ec6:	00 
   105ec7:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105ece:	e8 1a ae ff ff       	call   100ced <__panic>
@@ -11622,7 +11623,7 @@ check_boot_pgdir(void) {
   105eea:	00 
   105eeb:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105ef2:	00 
-  105ef3:	c7 44 24 04 36 02 00 	movl   $0x236,0x4(%esp)
+  105ef3:	c7 44 24 04 37 02 00 	movl   $0x237,0x4(%esp)
   105efa:	00 
   105efb:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105f02:	e8 e6 ad ff ff       	call   100ced <__panic>
@@ -11645,7 +11646,7 @@ check_boot_pgdir(void) {
   105f40:	00 
   105f41:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105f48:	00 
-  105f49:	c7 44 24 04 3a 02 00 	movl   $0x23a,0x4(%esp)
+  105f49:	c7 44 24 04 3b 02 00 	movl   $0x23b,0x4(%esp)
   105f50:	00 
   105f51:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105f58:	e8 90 ad ff ff       	call   100ced <__panic>
@@ -11665,7 +11666,7 @@ check_boot_pgdir(void) {
   105f87:	00 
   105f88:	c7 44 24 08 e5 7b 10 	movl   $0x107be5,0x8(%esp)
   105f8f:	00 
-  105f90:	c7 44 24 04 3d 02 00 	movl   $0x23d,0x4(%esp)
+  105f90:	c7 44 24 04 3e 02 00 	movl   $0x23e,0x4(%esp)
   105f97:	00 
   105f98:	c7 04 24 c0 7b 10 00 	movl   $0x107bc0,(%esp)
   105f9f:	e8 49 ad ff ff       	call   100ced <__panic>

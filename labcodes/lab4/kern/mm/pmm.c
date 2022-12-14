@@ -375,6 +375,41 @@ get_pte(pde_t *pgdir, uintptr_t la, bool create) {
     }
     return NULL;          // (8) return page table entry
 #endif
+    // (1) find page directory entry
+    // 获取页目录表中给定线性地址对应到的页目录项
+    pde_t *pdep = pgdir + PDX(la);
+    // 获取到该物理页的虚拟地址
+    pte_t *ptep = (pte_t *)(KADDR(*pdep & ~0XFFF)); 
+    // (2) check if entry is not present
+    // 判断页目录项是否不存在
+    if (!(*pdep & PTE_P)) {
+        // (3) check if creating is needed, then alloc page for page table
+        // CAUTION: this page is used for page table, not for common data page
+        // 判断是否需要创建新的页表, 不需要则返回NULL
+        if (!create){
+            return NULL;
+        }
+        // 分配一个页, 如果物理空间不足则返回NULL
+        struct Page* pt = alloc_page(); 
+        if (pt == NULL){
+            return NULL;
+        }
+        // (4) set page reference
+        // 更新该物理页的引用计数
+        set_page_ref(pt, 1);
+        // (5) get linear address of page
+        // 获取到该物理页的虚拟地址(此时已经启动了page机制，内核地址空间)(CPU执行的指令中使用的已经是虚拟地址了)
+        ptep = KADDR(page2pa(pt));
+        // (6) clear page content using memset
+        // 对新创建的页表进行初始化
+        memset(ptep, 0, PGSIZE);
+        // (7) set page directory entry's permission
+        // 对原先的页目录项进行设置: 对应页表的物理地址, 标志位(存在位, 读写位, 特权级)
+        *pdep = (page2pa(pt) & ~0XFFF) | PTE_USER;
+    }
+    // (8) return page table entry
+    // 返回线性地址对应的页表项
+    return ptep + PTX(la);
 }
 
 //get_page - get related Page struct for linear address la using PDT pgdir
@@ -420,6 +455,25 @@ page_remove_pte(pde_t *pgdir, uintptr_t la, pte_t *ptep) {
                                   //(6) flush tlb
     }
 #endif
+    // (1) check if this page table entry is present
+    // 如果二级表项存在
+    if (*ptep & PTE_P) {
+        // (2) find corresponding page to pte
+        // 获取物理页对应的Page结构
+        struct Page *page = pte2page(*ptep);
+        // (3) decrease page reference
+        // (4) and free this page when page reference reachs 0
+        // 减少引用计数, 如果该页的引用计数变成0，释放该物理页
+        if (page_ref_dec(page)==0){
+            free_page(page);
+        }
+        // (5) clear second page table entry
+        // 将PTE的存在位设置为0(表示该映射关系无效)
+        *ptep &= (~PTE_P); 
+        // (6) flush tlb
+        // 刷新TLB(保证TLB中的缓存不会有错误的映射关系)
+        tlb_invalidate(pgdir, la);
+    }
 }
 
 //page_remove - free an Page which is related linear address la and has an validated pte

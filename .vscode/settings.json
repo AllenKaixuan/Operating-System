@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "pmm.h": "c",
-        "list.h": "c"
+        "list.h": "c",
+        "swap.h": "c"
     }
 }

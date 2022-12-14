@@ -138,6 +138,7 @@ gdt_init(void) {
 //init_pmm_manager - initialize a pmm_manager instance
 static void
 init_pmm_manager(void) {
+    //pmm_manager = &default_pmm_manager;
     pmm_manager = &buddy_pmm_manager;
     cprintf("memory management: %s\n", pmm_manager->name);
     pmm_manager->init();

@@ -1,6 +1,7 @@
 #include <swap.h>
 #include <swapfs.h>
 #include <swap_fifo.h>
+//#include <swap_enhanced_clock.h>
 #include <stdio.h>
 #include <string.h>
 #include <memlayout.h>
@@ -39,6 +40,7 @@ swap_init(void)
      
 
      sm = &swap_manager_fifo;
+     //sm = &swap_manager_enhanced_clock;
      int r = sm->init();
      
      if (r == 0)
@@ -119,9 +121,10 @@ swap_out(struct mm_struct *mm, int n, int in_tick)
 int
 swap_in(struct mm_struct *mm, uintptr_t addr, struct Page **ptr_result)
 {
+     // 分配一个物理页
      struct Page *result = alloc_page();
      assert(result!=NULL);
-
+     // 获得页表项
      pte_t *ptep = get_pte(mm->pgdir, addr, 0);
      // cprintf("SWAP: load ptep %x swap entry %d to vaddr 0x%08x, page %x, No %d\n", ptep, (*ptep)>>8, addr, result, (result-pages));
     

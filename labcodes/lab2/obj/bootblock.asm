@@ -61,45 +61,45 @@ seta20.2:
 00007c1e <probe_memory>:
 
 probe_memory:
-    movl $0, 0x8000
+    movl $0, 0x8000                                 # 对0x8000处的32位单元清零,即给位于0x8000处的struct e820map的成员变量nr_map清零
     7c1e:	66 c7 06 00 80       	movw   $0x8000,(%esi)
     7c23:	00 00                	add    %al,(%eax)
     7c25:	00 00                	add    %al,(%eax)
     xorl %ebx, %ebx
     7c27:	66 31 db             	xor    %bx,%bx
-    movw $0x8004, %di
+    movw $0x8004, %di                               # 表示设置调用INT 15h BIOS中断后，BIOS返回的映射地址描述符的起始地址
     7c2a:	bf                   	.byte 0xbf
     7c2b:	04 80                	add    $0x80,%al
 
 00007c2d <start_probe>:
 start_probe:
-    movl $0xE820, %eax
+    movl $0xE820, %eax                              # INT 15的中断调用参数
     7c2d:	66 b8 20 e8          	mov    $0xe820,%ax
     7c31:	00 00                	add    %al,(%eax)
-    movl $20, %ecx
+    movl $20, %ecx                                  # 设置地址范围描述符的大小为20字节，其大小等于struct e820map的成员变量map的大小
     7c33:	66 b9 14 00          	mov    $0x14,%cx
     7c37:	00 00                	add    %al,(%eax)
-    movl $SMAP, %edx
+    movl $SMAP, %edx                                # 设置edx为534D4150h (即4个ASCII字符“SMAP”)，这是一个约定
     7c39:	66 ba 50 41          	mov    $0x4150,%dx
     7c3d:	4d                   	dec    %ebp
     7c3e:	53                   	push   %ebx
-    int $0x15
+    int $0x15                                       # 调用int 0x15中断，要求BIOS返回一个用地址范围描述符表示的内存段信息
     7c3f:	cd 15                	int    $0x15
-    jnc cont
+    jnc cont                                        # 如果eflags的CF位为0，则表示还有内存段需要探测
     7c41:	73 08                	jae    7c4b <cont>
-    movw $12345, 0x8000
+    movw $12345, 0x8000                             # 探测有问题，结束探测
     7c43:	c7 06 00 80 39 30    	movl   $0x30398000,(%esi)
     jmp finish_probe
     7c49:	eb 0e                	jmp    7c59 <finish_probe>
 
 00007c4b <cont>:
 cont:
-    addw $20, %di
+    addw $20, %di                                   # 设置下一个BIOS返回的映射地址描述符的起始地址
     7c4b:	83 c7 14             	add    $0x14,%edi
-    incl 0x8000
+    incl 0x8000                                     # 递增struct e820map的成员变量nr_map
     7c4e:	66 ff 06             	incw   (%esi)
     7c51:	00 80 66 83 fb 00    	add    %al,0xfb8366(%eax)
-    cmpl $0, %ebx
+    cmpl $0, %ebx                                   # 如果INT0x15返回的ebx为零，表示探测结束，否则继续探测
     jnz start_probe
     7c57:	75 d4                	jne    7c2d <start_probe>
 

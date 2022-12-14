@@ -44,13 +44,17 @@ _fifo_init_mm(struct mm_struct *mm)
 static int
 _fifo_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int swap_in)
 {
-    list_entry_t *head=(list_entry_t*) mm->sm_priv;
-    list_entry_t *entry=&(page->pra_page_link);
- 
+    // 找到链表入口
+    list_entry_t *head = (list_entry_t *)mm->sm_priv;
+    // 找到当前物理页用于组织成链表的list_entry_t
+    list_entry_t *entry = &(page->pra_page_link);
+    // 检查
     assert(entry != NULL && head != NULL);
-    //record the page access situlation
-    /*LAB3 EXERCISE 2: YOUR CODE*/ 
-    //(1)link the most recent arrival page at the back of the pra_list_head qeueue.
+    // record the page access situlation
+    /* LAB3 EXERCISE 2: YOUR CODE */
+    // (1)link the most recent arrival page at the back of the pra_list_head qeueue.
+    // 将当前指定的物理页插入到链表的末尾
+    list_add_before(head, entry);
     return 0;
 }
 /*
@@ -60,14 +64,24 @@ _fifo_map_swappable(struct mm_struct *mm, uintptr_t addr, struct Page *page, int
 static int
 _fifo_swap_out_victim(struct mm_struct *mm, struct Page ** ptr_page, int in_tick)
 {
-     list_entry_t *head=(list_entry_t*) mm->sm_priv;
-         assert(head != NULL);
-     assert(in_tick==0);
-     /* Select the victim */
-     /*LAB3 EXERCISE 2: YOUR CODE*/ 
-     //(1)  unlink the  earliest arrival page in front of pra_list_head qeueue
-     //(2)  assign the value of *ptr_page to the addr of this page
-     return 0;
+    // 找到链表的入口
+    list_entry_t *head = (list_entry_t *)mm->sm_priv;
+    // 检查
+    assert(head != NULL);
+    assert(in_tick == 0);
+    /* Select the victim */
+    /* LAB3 EXERCISE 2: YOUR CODE */
+    // (1) unlink the earliest arrival page in front of pra_list_head qeueue
+    // 取出链表头，即最早进入的物理页面
+    list_entry_t *le = list_next(head);
+    assert(le != head);     // 链表非空
+    // (2) assign the value of *ptr_page to the addr of this page
+    // 找到对应的物理页面的Page结构
+    struct Page *page = le2page(le, pra_page_link); 
+    // 从链表上删除取出的即将被换出的物理页面
+    list_del(le);
+    *ptr_page = page;
+    return 0;
 }
 
 static int

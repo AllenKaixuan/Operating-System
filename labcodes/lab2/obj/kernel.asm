@@ -9770,6 +9770,7 @@ init_pmm_manager(void) {
 c0104b3d:	55                   	push   %ebp
 c0104b3e:	89 e5                	mov    %esp,%ebp
 c0104b40:	83 ec 18             	sub    $0x18,%esp
+    //pmm_manager = &default_pmm_manager;
     pmm_manager = &buddy_pmm_manager;
 c0104b43:	c7 05 ac ee 11 c0 e8 	movl   $0xc01076e8,0xc011eeac
 c0104b4a:	76 10 c0 
@@ -10114,7 +10115,7 @@ c0104e4b:	8b 45 b8             	mov    -0x48(%ebp),%eax
 c0104e4e:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c0104e52:	c7 44 24 08 9c 7b 10 	movl   $0xc0107b9c,0x8(%esp)
 c0104e59:	c0 
-c0104e5a:	c7 44 24 04 dd 00 00 	movl   $0xdd,0x4(%esp)
+c0104e5a:	c7 44 24 04 de 00 00 	movl   $0xde,0x4(%esp)
 c0104e61:	00 
 c0104e62:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0104e69:	e8 7f be ff ff       	call   c0100ced <__panic>
@@ -10284,7 +10285,7 @@ c0105008:	c7 44 24 0c ce 7b 10 	movl   $0xc0107bce,0xc(%esp)
 c010500f:	c0 
 c0105010:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105017:	c0 
-c0105018:	c7 44 24 04 fb 00 00 	movl   $0xfb,0x4(%esp)
+c0105018:	c7 44 24 04 fc 00 00 	movl   $0xfc,0x4(%esp)
 c010501f:	00 
 c0105020:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105027:	e8 c1 bc ff ff       	call   c0100ced <__panic>
@@ -10336,7 +10337,7 @@ c01050a8:	c7 44 24 0c fa 7b 10 	movl   $0xc0107bfa,0xc(%esp)
 c01050af:	c0 
 c01050b0:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c01050b7:	c0 
-c01050b8:	c7 44 24 04 01 01 00 	movl   $0x101,0x4(%esp)
+c01050b8:	c7 44 24 04 02 01 00 	movl   $0x102,0x4(%esp)
 c01050bf:	00 
 c01050c0:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01050c7:	e8 21 bc ff ff       	call   c0100ced <__panic>
@@ -10381,7 +10382,7 @@ c0105112:	75 1c                	jne    c0105130 <boot_alloc_page+0x37>
         panic("boot_alloc_page failed.\n");
 c0105114:	c7 44 24 08 07 7c 10 	movl   $0xc0107c07,0x8(%esp)
 c010511b:	c0 
-c010511c:	c7 44 24 04 0d 01 00 	movl   $0x10d,0x4(%esp)
+c010511c:	c7 44 24 04 0e 01 00 	movl   $0x10e,0x4(%esp)
 c0105123:	00 
 c0105124:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c010512b:	e8 bd bb ff ff       	call   c0100ced <__panic>
@@ -10414,7 +10415,7 @@ c0105156:	8b 45 f4             	mov    -0xc(%ebp),%eax
 c0105159:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c010515d:	c7 44 24 08 9c 7b 10 	movl   $0xc0107b9c,0x8(%esp)
 c0105164:	c0 
-c0105165:	c7 44 24 04 17 01 00 	movl   $0x117,0x4(%esp)
+c0105165:	c7 44 24 04 18 01 00 	movl   $0x118,0x4(%esp)
 c010516c:	00 
 c010516d:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105174:	e8 74 bb ff ff       	call   c0100ced <__panic>
@@ -10454,7 +10455,7 @@ c01051ab:	8b 45 f0             	mov    -0x10(%ebp),%eax
 c01051ae:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c01051b2:	c7 44 24 08 9c 7b 10 	movl   $0xc0107b9c,0x8(%esp)
 c01051b9:	c0 
-c01051ba:	c7 44 24 04 2d 01 00 	movl   $0x12d,0x4(%esp)
+c01051ba:	c7 44 24 04 2e 01 00 	movl   $0x12e,0x4(%esp)
 c01051c1:	00 
 c01051c2:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01051c9:	e8 1f bb ff ff       	call   c0100ced <__panic>
@@ -10539,7 +10540,7 @@ c0105262:	8b 45 ec             	mov    -0x14(%ebp),%eax
 c0105265:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c0105269:	c7 44 24 08 f8 7a 10 	movl   $0xc0107af8,0x8(%esp)
 c0105270:	c0 
-c0105271:	c7 44 24 04 64 01 00 	movl   $0x164,0x4(%esp)
+c0105271:	c7 44 24 04 65 01 00 	movl   $0x165,0x4(%esp)
 c0105278:	00 
 c0105279:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105280:	e8 68 ba ff ff       	call   c0100ced <__panic>
@@ -10601,7 +10602,7 @@ c0105303:	8b 45 e0             	mov    -0x20(%ebp),%eax
 c0105306:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c010530a:	c7 44 24 08 f8 7a 10 	movl   $0xc0107af8,0x8(%esp)
 c0105311:	c0 
-c0105312:	c7 44 24 04 78 01 00 	movl   $0x178,0x4(%esp)
+c0105312:	c7 44 24 04 79 01 00 	movl   $0x179,0x4(%esp)
 c0105319:	00 
 c010531a:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105321:	e8 c7 b9 ff ff       	call   c0100ced <__panic>
@@ -10910,7 +10911,7 @@ c0105566:	8b 45 f4             	mov    -0xc(%ebp),%eax
 c0105569:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c010556d:	c7 44 24 08 9c 7b 10 	movl   $0xc0107b9c,0x8(%esp)
 c0105574:	c0 
-c0105575:	c7 44 24 04 e9 01 00 	movl   $0x1e9,0x4(%esp)
+c0105575:	c7 44 24 04 ea 01 00 	movl   $0x1ea,0x4(%esp)
 c010557c:	00 
 c010557d:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105584:	e8 64 b7 ff ff       	call   c0100ced <__panic>
@@ -10972,7 +10973,7 @@ c01055da:	c7 44 24 0c 3f 7c 10 	movl   $0xc0107c3f,0xc(%esp)
 c01055e1:	c0 
 c01055e2:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c01055e9:	c0 
-c01055ea:	c7 44 24 04 f6 01 00 	movl   $0x1f6,0x4(%esp)
+c01055ea:	c7 44 24 04 f7 01 00 	movl   $0x1f7,0x4(%esp)
 c01055f1:	00 
 c01055f2:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01055f9:	e8 ef b6 ff ff       	call   c0100ced <__panic>
@@ -10988,7 +10989,7 @@ c0105615:	c7 44 24 0c 5c 7c 10 	movl   $0xc0107c5c,0xc(%esp)
 c010561c:	c0 
 c010561d:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105624:	c0 
-c0105625:	c7 44 24 04 f7 01 00 	movl   $0x1f7,0x4(%esp)
+c0105625:	c7 44 24 04 f8 01 00 	movl   $0x1f8,0x4(%esp)
 c010562c:	00 
 c010562d:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105634:	e8 b4 b6 ff ff       	call   c0100ced <__panic>
@@ -11006,7 +11007,7 @@ c010565a:	c7 44 24 0c 94 7c 10 	movl   $0xc0107c94,0xc(%esp)
 c0105661:	c0 
 c0105662:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105669:	c0 
-c010566a:	c7 44 24 04 f8 01 00 	movl   $0x1f8,0x4(%esp)
+c010566a:	c7 44 24 04 f9 01 00 	movl   $0x1f9,0x4(%esp)
 c0105671:	00 
 c0105672:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105679:	e8 6f b6 ff ff       	call   c0100ced <__panic>
@@ -11032,7 +11033,7 @@ c01056b5:	c7 44 24 0c bc 7c 10 	movl   $0xc0107cbc,0xc(%esp)
 c01056bc:	c0 
 c01056bd:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c01056c4:	c0 
-c01056c5:	c7 44 24 04 fc 01 00 	movl   $0x1fc,0x4(%esp)
+c01056c5:	c7 44 24 04 fd 01 00 	movl   $0x1fd,0x4(%esp)
 c01056cc:	00 
 c01056cd:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01056d4:	e8 14 b6 ff ff       	call   c0100ced <__panic>
@@ -11053,7 +11054,7 @@ c01056ff:	c7 44 24 0c e8 7c 10 	movl   $0xc0107ce8,0xc(%esp)
 c0105706:	c0 
 c0105707:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c010570e:	c0 
-c010570f:	c7 44 24 04 ff 01 00 	movl   $0x1ff,0x4(%esp)
+c010570f:	c7 44 24 04 00 02 00 	movl   $0x200,0x4(%esp)
 c0105716:	00 
 c0105717:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c010571e:	e8 ca b5 ff ff       	call   c0100ced <__panic>
@@ -11068,7 +11069,7 @@ c0105735:	c7 44 24 0c 15 7d 10 	movl   $0xc0107d15,0xc(%esp)
 c010573c:	c0 
 c010573d:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105744:	c0 
-c0105745:	c7 44 24 04 00 02 00 	movl   $0x200,0x4(%esp)
+c0105745:	c7 44 24 04 01 02 00 	movl   $0x201,0x4(%esp)
 c010574c:	00 
 c010574d:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105754:	e8 94 b5 ff ff       	call   c0100ced <__panic>
@@ -11082,7 +11083,7 @@ c0105769:	c7 44 24 0c 2b 7d 10 	movl   $0xc0107d2b,0xc(%esp)
 c0105770:	c0 
 c0105771:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105778:	c0 
-c0105779:	c7 44 24 04 01 02 00 	movl   $0x201,0x4(%esp)
+c0105779:	c7 44 24 04 02 02 00 	movl   $0x202,0x4(%esp)
 c0105780:	00 
 c0105781:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105788:	e8 60 b5 ff ff       	call   c0100ced <__panic>
@@ -11102,7 +11103,7 @@ c01057af:	8b 45 ec             	mov    -0x14(%ebp),%eax
 c01057b2:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c01057b6:	c7 44 24 08 f8 7a 10 	movl   $0xc0107af8,0x8(%esp)
 c01057bd:	c0 
-c01057be:	c7 44 24 04 03 02 00 	movl   $0x203,0x4(%esp)
+c01057be:	c7 44 24 04 04 02 00 	movl   $0x204,0x4(%esp)
 c01057c5:	00 
 c01057c6:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01057cd:	e8 1b b5 ff ff       	call   c0100ced <__panic>
@@ -11124,7 +11125,7 @@ c0105802:	c7 44 24 0c 40 7d 10 	movl   $0xc0107d40,0xc(%esp)
 c0105809:	c0 
 c010580a:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105811:	c0 
-c0105812:	c7 44 24 04 04 02 00 	movl   $0x204,0x4(%esp)
+c0105812:	c7 44 24 04 05 02 00 	movl   $0x205,0x4(%esp)
 c0105819:	00 
 c010581a:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105821:	e8 c7 b4 ff ff       	call   c0100ced <__panic>
@@ -11149,7 +11150,7 @@ c010585d:	c7 44 24 0c 68 7d 10 	movl   $0xc0107d68,0xc(%esp)
 c0105864:	c0 
 c0105865:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c010586c:	c0 
-c010586d:	c7 44 24 04 07 02 00 	movl   $0x207,0x4(%esp)
+c010586d:	c7 44 24 04 08 02 00 	movl   $0x208,0x4(%esp)
 c0105874:	00 
 c0105875:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c010587c:	e8 6c b4 ff ff       	call   c0100ced <__panic>
@@ -11168,7 +11169,7 @@ c01058a7:	c7 44 24 0c a0 7d 10 	movl   $0xc0107da0,0xc(%esp)
 c01058ae:	c0 
 c01058af:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c01058b6:	c0 
-c01058b7:	c7 44 24 04 08 02 00 	movl   $0x208,0x4(%esp)
+c01058b7:	c7 44 24 04 09 02 00 	movl   $0x209,0x4(%esp)
 c01058be:	00 
 c01058bf:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01058c6:	e8 22 b4 ff ff       	call   c0100ced <__panic>
@@ -11182,7 +11183,7 @@ c01058d7:	c7 44 24 0c d0 7d 10 	movl   $0xc0107dd0,0xc(%esp)
 c01058de:	c0 
 c01058df:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c01058e6:	c0 
-c01058e7:	c7 44 24 04 09 02 00 	movl   $0x209,0x4(%esp)
+c01058e7:	c7 44 24 04 0a 02 00 	movl   $0x20a,0x4(%esp)
 c01058ee:	00 
 c01058ef:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01058f6:	e8 f2 b3 ff ff       	call   c0100ced <__panic>
@@ -11196,7 +11197,7 @@ c0105907:	c7 44 24 0c de 7d 10 	movl   $0xc0107dde,0xc(%esp)
 c010590e:	c0 
 c010590f:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105916:	c0 
-c0105917:	c7 44 24 04 0a 02 00 	movl   $0x20a,0x4(%esp)
+c0105917:	c7 44 24 04 0b 02 00 	movl   $0x20b,0x4(%esp)
 c010591e:	00 
 c010591f:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105926:	e8 c2 b3 ff ff       	call   c0100ced <__panic>
@@ -11210,7 +11211,7 @@ c0105939:	c7 44 24 0c ec 7d 10 	movl   $0xc0107dec,0xc(%esp)
 c0105940:	c0 
 c0105941:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105948:	c0 
-c0105949:	c7 44 24 04 0b 02 00 	movl   $0x20b,0x4(%esp)
+c0105949:	c7 44 24 04 0c 02 00 	movl   $0x20c,0x4(%esp)
 c0105950:	00 
 c0105951:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105958:	e8 90 b3 ff ff       	call   c0100ced <__panic>
@@ -11224,7 +11225,7 @@ c010596d:	c7 44 24 0c 02 7e 10 	movl   $0xc0107e02,0xc(%esp)
 c0105974:	c0 
 c0105975:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c010597c:	c0 
-c010597d:	c7 44 24 04 0c 02 00 	movl   $0x20c,0x4(%esp)
+c010597d:	c7 44 24 04 0d 02 00 	movl   $0x20d,0x4(%esp)
 c0105984:	00 
 c0105985:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c010598c:	e8 5c b3 ff ff       	call   c0100ced <__panic>
@@ -11245,7 +11246,7 @@ c01059b9:	c7 44 24 0c 14 7e 10 	movl   $0xc0107e14,0xc(%esp)
 c01059c0:	c0 
 c01059c1:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c01059c8:	c0 
-c01059c9:	c7 44 24 04 0e 02 00 	movl   $0x20e,0x4(%esp)
+c01059c9:	c7 44 24 04 0f 02 00 	movl   $0x20f,0x4(%esp)
 c01059d0:	00 
 c01059d1:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c01059d8:	e8 10 b3 ff ff       	call   c0100ced <__panic>
@@ -11259,7 +11260,7 @@ c01059ed:	c7 44 24 0c 40 7e 10 	movl   $0xc0107e40,0xc(%esp)
 c01059f4:	c0 
 c01059f5:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c01059fc:	c0 
-c01059fd:	c7 44 24 04 0f 02 00 	movl   $0x20f,0x4(%esp)
+c01059fd:	c7 44 24 04 10 02 00 	movl   $0x210,0x4(%esp)
 c0105a04:	00 
 c0105a05:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105a0c:	e8 dc b2 ff ff       	call   c0100ced <__panic>
@@ -11273,7 +11274,7 @@ c0105a20:	c7 44 24 0c 52 7e 10 	movl   $0xc0107e52,0xc(%esp)
 c0105a27:	c0 
 c0105a28:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105a2f:	c0 
-c0105a30:	c7 44 24 04 10 02 00 	movl   $0x210,0x4(%esp)
+c0105a30:	c7 44 24 04 11 02 00 	movl   $0x211,0x4(%esp)
 c0105a37:	00 
 c0105a38:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105a3f:	e8 a9 b2 ff ff       	call   c0100ced <__panic>
@@ -11292,7 +11293,7 @@ c0105a6a:	c7 44 24 0c a0 7d 10 	movl   $0xc0107da0,0xc(%esp)
 c0105a71:	c0 
 c0105a72:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105a79:	c0 
-c0105a7a:	c7 44 24 04 11 02 00 	movl   $0x211,0x4(%esp)
+c0105a7a:	c7 44 24 04 12 02 00 	movl   $0x212,0x4(%esp)
 c0105a81:	00 
 c0105a82:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105a89:	e8 5f b2 ff ff       	call   c0100ced <__panic>
@@ -11307,7 +11308,7 @@ c0105aa0:	c7 44 24 0c 15 7d 10 	movl   $0xc0107d15,0xc(%esp)
 c0105aa7:	c0 
 c0105aa8:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105aaf:	c0 
-c0105ab0:	c7 44 24 04 12 02 00 	movl   $0x212,0x4(%esp)
+c0105ab0:	c7 44 24 04 13 02 00 	movl   $0x213,0x4(%esp)
 c0105ab7:	00 
 c0105ab8:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105abf:	e8 29 b2 ff ff       	call   c0100ced <__panic>
@@ -11321,7 +11322,7 @@ c0105ad0:	c7 44 24 0c 64 7e 10 	movl   $0xc0107e64,0xc(%esp)
 c0105ad7:	c0 
 c0105ad8:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105adf:	c0 
-c0105ae0:	c7 44 24 04 13 02 00 	movl   $0x213,0x4(%esp)
+c0105ae0:	c7 44 24 04 14 02 00 	movl   $0x214,0x4(%esp)
 c0105ae7:	00 
 c0105ae8:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105aef:	e8 f9 b1 ff ff       	call   c0100ced <__panic>
@@ -11342,7 +11343,7 @@ c0105b19:	c7 44 24 0c 2b 7d 10 	movl   $0xc0107d2b,0xc(%esp)
 c0105b20:	c0 
 c0105b21:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105b28:	c0 
-c0105b29:	c7 44 24 04 16 02 00 	movl   $0x216,0x4(%esp)
+c0105b29:	c7 44 24 04 17 02 00 	movl   $0x217,0x4(%esp)
 c0105b30:	00 
 c0105b31:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105b38:	e8 b0 b1 ff ff       	call   c0100ced <__panic>
@@ -11356,7 +11357,7 @@ c0105b4c:	c7 44 24 0c 52 7e 10 	movl   $0xc0107e52,0xc(%esp)
 c0105b53:	c0 
 c0105b54:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105b5b:	c0 
-c0105b5c:	c7 44 24 04 17 02 00 	movl   $0x217,0x4(%esp)
+c0105b5c:	c7 44 24 04 18 02 00 	movl   $0x218,0x4(%esp)
 c0105b63:	00 
 c0105b64:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105b6b:	e8 7d b1 ff ff       	call   c0100ced <__panic>
@@ -11377,7 +11378,7 @@ c0105b94:	c7 44 24 0c 79 7e 10 	movl   $0xc0107e79,0xc(%esp)
 c0105b9b:	c0 
 c0105b9c:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105ba3:	c0 
-c0105ba4:	c7 44 24 04 1a 02 00 	movl   $0x21a,0x4(%esp)
+c0105ba4:	c7 44 24 04 1b 02 00 	movl   $0x21b,0x4(%esp)
 c0105bab:	00 
 c0105bac:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105bb3:	e8 35 b1 ff ff       	call   c0100ced <__panic>
@@ -11391,7 +11392,7 @@ c0105bc7:	c7 44 24 0c 52 7e 10 	movl   $0xc0107e52,0xc(%esp)
 c0105bce:	c0 
 c0105bcf:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105bd6:	c0 
-c0105bd7:	c7 44 24 04 1b 02 00 	movl   $0x21b,0x4(%esp)
+c0105bd7:	c7 44 24 04 1c 02 00 	movl   $0x21c,0x4(%esp)
 c0105bde:	00 
 c0105bdf:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105be6:	e8 02 b1 ff ff       	call   c0100ced <__panic>
@@ -11409,7 +11410,7 @@ c0105c07:	c7 44 24 0c 8c 7e 10 	movl   $0xc0107e8c,0xc(%esp)
 c0105c0e:	c0 
 c0105c0f:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105c16:	c0 
-c0105c17:	c7 44 24 04 1d 02 00 	movl   $0x21d,0x4(%esp)
+c0105c17:	c7 44 24 04 1e 02 00 	movl   $0x21e,0x4(%esp)
 c0105c1e:	00 
 c0105c1f:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105c26:	e8 c2 b0 ff ff       	call   c0100ced <__panic>
@@ -11460,7 +11461,7 @@ c0105c91:	8b 45 e4             	mov    -0x1c(%ebp),%eax
 c0105c94:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c0105c98:	c7 44 24 08 f8 7a 10 	movl   $0xc0107af8,0x8(%esp)
 c0105c9f:	c0 
-c0105ca0:	c7 44 24 04 29 02 00 	movl   $0x229,0x4(%esp)
+c0105ca0:	c7 44 24 04 2a 02 00 	movl   $0x22a,0x4(%esp)
 c0105ca7:	00 
 c0105ca8:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105caf:	e8 39 b0 ff ff       	call   c0100ced <__panic>
@@ -11480,7 +11481,7 @@ c0105ce0:	c7 44 24 0c d0 7e 10 	movl   $0xc0107ed0,0xc(%esp)
 c0105ce7:	c0 
 c0105ce8:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105cef:	c0 
-c0105cf0:	c7 44 24 04 29 02 00 	movl   $0x229,0x4(%esp)
+c0105cf0:	c7 44 24 04 2a 02 00 	movl   $0x22a,0x4(%esp)
 c0105cf7:	00 
 c0105cf8:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105cff:	e8 e9 af ff ff       	call   c0100ced <__panic>
@@ -11496,7 +11497,7 @@ c0105d17:	c7 44 24 0c 0d 7f 10 	movl   $0xc0107f0d,0xc(%esp)
 c0105d1e:	c0 
 c0105d1f:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105d26:	c0 
-c0105d27:	c7 44 24 04 2a 02 00 	movl   $0x22a,0x4(%esp)
+c0105d27:	c7 44 24 04 2b 02 00 	movl   $0x22b,0x4(%esp)
 c0105d2e:	00 
 c0105d2f:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105d36:	e8 b2 af ff ff       	call   c0100ced <__panic>
@@ -11522,7 +11523,7 @@ c0105d76:	8b 45 f0             	mov    -0x10(%ebp),%eax
 c0105d79:	89 44 24 0c          	mov    %eax,0xc(%esp)
 c0105d7d:	c7 44 24 08 9c 7b 10 	movl   $0xc0107b9c,0x8(%esp)
 c0105d84:	c0 
-c0105d85:	c7 44 24 04 2d 02 00 	movl   $0x22d,0x4(%esp)
+c0105d85:	c7 44 24 04 2e 02 00 	movl   $0x22e,0x4(%esp)
 c0105d8c:	00 
 c0105d8d:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105d94:	e8 54 af ff ff       	call   c0100ced <__panic>
@@ -11534,7 +11535,7 @@ c0105da5:	c7 44 24 0c 24 7f 10 	movl   $0xc0107f24,0xc(%esp)
 c0105dac:	c0 
 c0105dad:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105db4:	c0 
-c0105db5:	c7 44 24 04 2d 02 00 	movl   $0x22d,0x4(%esp)
+c0105db5:	c7 44 24 04 2e 02 00 	movl   $0x22e,0x4(%esp)
 c0105dbc:	00 
 c0105dbd:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105dc4:	e8 24 af ff ff       	call   c0100ced <__panic>
@@ -11548,7 +11549,7 @@ c0105dd4:	c7 44 24 0c 58 7f 10 	movl   $0xc0107f58,0xc(%esp)
 c0105ddb:	c0 
 c0105ddc:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105de3:	c0 
-c0105de4:	c7 44 24 04 2f 02 00 	movl   $0x22f,0x4(%esp)
+c0105de4:	c7 44 24 04 30 02 00 	movl   $0x230,0x4(%esp)
 c0105deb:	00 
 c0105dec:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105df3:	e8 f5 ae ff ff       	call   c0100ced <__panic>
@@ -11574,7 +11575,7 @@ c0105e2f:	c7 44 24 0c 6c 7f 10 	movl   $0xc0107f6c,0xc(%esp)
 c0105e36:	c0 
 c0105e37:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105e3e:	c0 
-c0105e3f:	c7 44 24 04 33 02 00 	movl   $0x233,0x4(%esp)
+c0105e3f:	c7 44 24 04 34 02 00 	movl   $0x234,0x4(%esp)
 c0105e46:	00 
 c0105e47:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105e4e:	e8 9a ae ff ff       	call   c0100ced <__panic>
@@ -11588,7 +11589,7 @@ c0105e63:	c7 44 24 0c 9a 7f 10 	movl   $0xc0107f9a,0xc(%esp)
 c0105e6a:	c0 
 c0105e6b:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105e72:	c0 
-c0105e73:	c7 44 24 04 34 02 00 	movl   $0x234,0x4(%esp)
+c0105e73:	c7 44 24 04 35 02 00 	movl   $0x235,0x4(%esp)
 c0105e7a:	00 
 c0105e7b:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105e82:	e8 66 ae ff ff       	call   c0100ced <__panic>
@@ -11608,7 +11609,7 @@ c0105eaf:	c7 44 24 0c ac 7f 10 	movl   $0xc0107fac,0xc(%esp)
 c0105eb6:	c0 
 c0105eb7:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105ebe:	c0 
-c0105ebf:	c7 44 24 04 35 02 00 	movl   $0x235,0x4(%esp)
+c0105ebf:	c7 44 24 04 36 02 00 	movl   $0x236,0x4(%esp)
 c0105ec6:	00 
 c0105ec7:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105ece:	e8 1a ae ff ff       	call   c0100ced <__panic>
@@ -11622,7 +11623,7 @@ c0105ee3:	c7 44 24 0c e3 7f 10 	movl   $0xc0107fe3,0xc(%esp)
 c0105eea:	c0 
 c0105eeb:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105ef2:	c0 
-c0105ef3:	c7 44 24 04 36 02 00 	movl   $0x236,0x4(%esp)
+c0105ef3:	c7 44 24 04 37 02 00 	movl   $0x237,0x4(%esp)
 c0105efa:	00 
 c0105efb:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105f02:	e8 e6 ad ff ff       	call   c0100ced <__panic>
@@ -11645,7 +11646,7 @@ c0105f39:	c7 44 24 0c 0c 80 10 	movl   $0xc010800c,0xc(%esp)
 c0105f40:	c0 
 c0105f41:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105f48:	c0 
-c0105f49:	c7 44 24 04 3a 02 00 	movl   $0x23a,0x4(%esp)
+c0105f49:	c7 44 24 04 3b 02 00 	movl   $0x23b,0x4(%esp)
 c0105f50:	00 
 c0105f51:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105f58:	e8 90 ad ff ff       	call   c0100ced <__panic>
@@ -11665,7 +11666,7 @@ c0105f80:	c7 44 24 0c 44 80 10 	movl   $0xc0108044,0xc(%esp)
 c0105f87:	c0 
 c0105f88:	c7 44 24 08 e5 7b 10 	movl   $0xc0107be5,0x8(%esp)
 c0105f8f:	c0 
-c0105f90:	c7 44 24 04 3d 02 00 	movl   $0x23d,0x4(%esp)
+c0105f90:	c7 44 24 04 3e 02 00 	movl   $0x23e,0x4(%esp)
 c0105f97:	00 
 c0105f98:	c7 04 24 c0 7b 10 c0 	movl   $0xc0107bc0,(%esp)
 c0105f9f:	e8 49 ad ff ff       	call   c0100ced <__panic>
