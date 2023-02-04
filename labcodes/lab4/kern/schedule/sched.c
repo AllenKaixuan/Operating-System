@@ -4,12 +4,14 @@
 #include <sched.h>
 #include <assert.h>
 
+// 唤醒进程
 void
 wakeup_proc(struct proc_struct *proc) {
     assert(proc->state != PROC_ZOMBIE && proc->state != PROC_RUNNABLE);
     proc->state = PROC_RUNNABLE;
 }
 
+// 调度器
 void
 schedule(void) {
     bool intr_flag;

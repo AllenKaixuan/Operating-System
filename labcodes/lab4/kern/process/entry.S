@@ -3,8 +3,8 @@
 kernel_thread_entry:        # void kernel_thread(void)
 
     pushl %edx              # push arg
-    call *%ebx              # call fn
+    call *%ebx              # call fn 调用进程
 
     pushl %eax              # save the return value of fn(arg)
-    call do_exit            # call do_exit to terminate current thread
+    call do_exit            # call do_exit to terminate current thread 从当前进程返回
 

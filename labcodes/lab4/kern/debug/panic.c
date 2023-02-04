@@ -23,8 +23,8 @@ __panic(const char *file, int line, const char *fmt, ...) {
     vcprintf(fmt, ap);
     cprintf("\n");
     
-    cprintf("stack trackback:\n");
-    print_stackframe();
+    //cprintf("stack trackback:\n");
+    //print_stackframe();
     
     va_end(ap);
 

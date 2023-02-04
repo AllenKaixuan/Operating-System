@@ -12,7 +12,7 @@ enum proc_state {
     PROC_UNINIT = 0,  // uninitialized
     PROC_SLEEPING,    // sleeping
     PROC_RUNNABLE,    // runnable(maybe running)
-    PROC_ZOMBIE,      // almost dead, and wait parent proc to reclaim his resource
+    PROC_ZOMBIE,      // almost dead, and wait parent proc to reclaim(回收) his resource
 };
 
 // Saved registers for kernel context switches.

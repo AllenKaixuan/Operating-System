@@ -126,7 +126,7 @@ mon_kerninfo(int argc, char **argv, struct trapframe *tf) {
  * */
 int
 mon_backtrace(int argc, char **argv, struct trapframe *tf) {
-    print_stackframe();
+    //print_stackframe();
     return 0;
 }
 

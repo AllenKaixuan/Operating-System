@@ -79,7 +79,7 @@ static int nr_process = 0;
 
 void kernel_thread_entry(void);
 void forkrets(struct trapframe *tf);
-void switch_to(struct context *from, struct context *to);
+void switch_to(struct context *from, struct context *to);   // 完成进程切换中环境的保存和设置
 
 // alloc_proc - alloc a proc_struct and init all fields of proc_struct
 static struct proc_struct *
@@ -101,7 +101,22 @@ alloc_proc(void) {
      *       uintptr_t cr3;                              // CR3 register: the base addr of Page Directroy Table(PDT)
      *       uint32_t flags;                             // Process flag
      *       char name[PROC_NAME_LEN + 1];               // Process name
+     * below fields in proc_struct don't need to be initialized
+     *       list_entry_t list_link;                     // Process link list 
+     *       list_entry_t hash_link;                     // Process hash list
      */
+        proc->state = PROC_UNINIT;      // 进程状态
+        proc->pid = -1;                 // 进程号: -1为无效
+        proc->runs = 0;                 // 运行次数
+        proc->kstack = 0;               // 内核栈
+        proc->need_resched = 0;         // 是否需要调度器调度
+        proc->parent = NULL;            // 父进程
+        proc->mm = NULL;                // 内存管理
+        memset(&(proc->context), 0, sizeof(struct context));//进程上下文
+        proc->tf = NULL;                // Trap Frame
+        proc->cr3 = boot_cr3;           // CR3reg: 保存PDT基址
+        proc->flags = 0;                // 进程标志位
+        memset(proc->name, 0, PROC_NAME_LEN);               //进程名
     }
     return proc;
 }
@@ -125,6 +140,7 @@ get_proc_name(struct proc_struct *proc) {
 static int
 get_pid(void) {
     static_assert(MAX_PID > MAX_PROCESS);
+    
     struct proc_struct *proc;
     list_entry_t *list = &proc_list, *le;
     static int next_safe = MAX_PID, last_pid = MAX_PID;
@@ -160,14 +176,22 @@ get_pid(void) {
 // NOTE: before call switch_to, should load  base addr of "proc"'s new PDT
 void
 proc_run(struct proc_struct *proc) {
+    // 首先判断要切换到的进程是不是当前进程，若是则不需进行任何处理。
     if (proc != current) {
         bool intr_flag;
         struct proc_struct *prev = current, *next = proc;
+        // 调用local_intr_save和local_intr_restore函数去使能中断，避免在进程切换过程中出现中断。
         local_intr_save(intr_flag);
         {
+             // 将当前进程设为传入的进程
             current = proc;
+            // 修改 esp 指针的值
+            // 设置任务状态段tss中的特权级0下的esp0指针为next内核线程的内核栈的栈顶
             load_esp0(next->kstack + KSTACKSIZE);
+            // 修改页表项
+            // 重新加载 cr3 寄存器(页目录表基址) 进行进程间的页表切换
             lcr3(next->cr3);
+            // 使用 switch_to 进行上下文切换。
             switch_to(&(prev->context), &(next->context));
         }
         local_intr_restore(intr_flag);
@@ -296,6 +320,40 @@ do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
     //    5. insert proc_struct into hash_list && proc_list
     //    6. call wakeup_proc to make the new child process RUNNABLE
     //    7. set ret vaule using child proc's pid
+    proc = alloc_proc();
+    if (proc == NULL) 
+        goto fork_out;
+    proc->parent = current;
+
+    // 分配内核栈
+    if (setup_kstack(proc))
+        goto bad_fork_cleanup_proc;
+
+    // 拷贝或者共享mm
+    if (copy_mm(clone_flags, proc)) 
+        goto bad_fork_cleanup_kstack;
+
+    // 设置当前进程的 context 和 tf
+    copy_thread(proc, stack, tf);
+
+    // 需要去使能中断
+    bool intr_flag;
+    local_intr_save(intr_flag);
+
+    // 获得当前进程的id
+    proc->pid = get_pid();
+    nr_process++;
+
+    // 插入到进程列表中
+    hash_proc(proc);
+    list_add(&proc_list, &proc->list_link);
+
+    local_intr_restore(intr_flag);
+
+    // 当前进程设为 RUNNABLE
+    wakeup_proc(proc);
+
+    ret = proc->pid;
 fork_out:
     return ret;
 
@@ -334,7 +392,8 @@ proc_init(void) {
     for (i = 0; i < HASH_LIST_SIZE; i ++) {
         list_init(hash_list + i);
     }
-
+    //不停地查询，看是否有其他内核线程可以执行了，如果有，马上让调度器选择那个内核线程执行
+    //idleproc 内核线程是在 ucore 操作系统没有其他内核线程可执行的情况下才会被调用
     if ((idleproc = alloc_proc()) == NULL) {
         panic("cannot alloc idleproc.\n");
     }
@@ -342,7 +401,7 @@ proc_init(void) {
     idleproc->pid = 0;
     idleproc->state = PROC_RUNNABLE;
     idleproc->kstack = (uintptr_t)bootstack;
-    idleproc->need_resched = 1;
+    idleproc->need_resched = 1;         // 需要调用schedule函数，完成进程调度和进程切换
     set_proc_name(idleproc, "idle");
     nr_process ++;
 
@@ -352,7 +411,7 @@ proc_init(void) {
     if (pid <= 0) {
         panic("create init_main failed.\n");
     }
-
+    // 显示“Hello World”，表明自己存在且能正常工作了
     initproc = find_proc(pid);
     set_proc_name(initproc, "init");
 
